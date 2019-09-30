@@ -1,0 +1,16 @@
+9/20/2019 - 9/27/2019
+---------------------
+*Have Dr. Mosse send us the simulator and review its functionality
+*Create a basic "hello world" Android application to get a base to work off of
+*Research how we can modulate the power state of the GPS device
+
+REVIEW:
+Dr. Mosse did not return our email and thus we were unable to look over the simulator, another email will be sent
+A basic Android application was made to get a base layer to work with
+Initial research into how to modulate the power state of the GPS was done and according to what we could find it seems rather hacky and differs between Android versions, some implementations we saw even had to use an exploit which has since been patched
+
+9/27/2019 - 10/4/2019
+---------------------
+*Send another email to Dr. Mosse requesting to get a copy of the simulator sent to us
+*Attempt to add functionality to the app that utilizes the code we were able to find that will power cycle the GPS
+*Research how to monitor power consumption on an Android device
