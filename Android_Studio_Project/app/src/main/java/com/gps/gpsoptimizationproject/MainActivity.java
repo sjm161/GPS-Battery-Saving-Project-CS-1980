@@ -1,5 +1,7 @@
 package com.gps.gpsoptimizationproject;
 
+import android.content.Context;
+import android.location.LocationManager;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -8,6 +10,7 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.provider.Settings;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +21,8 @@ import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity {
     static boolean textstatus = false;
+    static String beforeEnable;
+    static TextView MainText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         final TextView gpsIndicator = (TextView) findViewById(R.id.GPSindicator);
-
+        MainText = (TextView) findViewById(R.id.MainTextView);
         //Making the button do something
         Button gpsButton = (Button) findViewById(R.id.GPSToggle);
 
@@ -44,10 +49,12 @@ public class MainActivity extends AppCompatActivity {
                 if(textstatus){
                     textstatus = false;
                     gpsIndicator.setText("Hello World again!");
+                    turnGpsOn(getApplicationContext());
                 }
                 else{
                     textstatus = true;
                     gpsIndicator.setText("Something");
+                    turnGpsOff(getApplicationContext());
                 }
             }
         });
@@ -78,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     /* Note from Matt - Code from StackOverFlow at this link.
     https://stackoverflow.com/questions/4721449/how-can-i-enable-or-disable-the-gps-programmatically-on-android
     AS raises errors which means we need to figure out what does what and if this even works with
-    current version of android
+    current version of android*/
 
     private void turnGpsOn (Context context) {
         beforeEnable = Settings.Secure.getString (context.getContentResolver(),
@@ -90,7 +97,11 @@ public class MainActivity extends AppCompatActivity {
             Settings.Secure.putString (context.getContentResolver(),
                     Settings.Secure.LOCATION_PROVIDERS_ALLOWED,
                     newSet);
-        } catch(Exception e) {}
+        } catch(Exception e) {
+            //Let's add in some error checking - lets set one of the text views to an error message
+            //for exception handling
+            MainText.setText(e.getMessage());
+        }
     }
 
 
@@ -120,8 +131,12 @@ public class MainActivity extends AppCompatActivity {
             Settings.Secure.putString (context.getContentResolver(),
                     Settings.Secure.LOCATION_PROVIDERS_ALLOWED,
                     beforeEnable);
-        } catch(Exception e) {}
+        } catch(Exception e) {
+            //Let's add in some error checking - lets set one of the text views to an error message
+            //for exception handling
+            MainText.setText(e.getMessage());
+        }
     }
 
-     */
+
 }
