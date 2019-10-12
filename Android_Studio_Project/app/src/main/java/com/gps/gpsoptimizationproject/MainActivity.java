@@ -1,6 +1,7 @@
 package com.gps.gpsoptimizationproject;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Bundle;
 
@@ -34,8 +35,9 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Hello World Again!", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+               /* Snackbar.make(view, "Hello World Again!", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();*/
+               moveToMapActivity();
             }
         });
         final TextView gpsIndicator = (TextView) findViewById(R.id.GPSindicator);
@@ -136,6 +138,10 @@ public class MainActivity extends AppCompatActivity {
             //for exception handling
             MainText.setText(e.getMessage());
         }
+    }
+    private void moveToMapActivity(){
+        Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+        startActivity(intent);
     }
 
 
