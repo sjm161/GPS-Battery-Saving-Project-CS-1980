@@ -50,12 +50,12 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(textstatus){
                     textstatus = false;
-                    gpsIndicator.setText("Hello World again!");
+                    gpsIndicator.setText("GPS ON");
                     turnGpsOn(getApplicationContext());
                 }
                 else{
                     textstatus = true;
-                    gpsIndicator.setText("Something");
+                    gpsIndicator.setText("GPS OFF");
                     turnGpsOff(getApplicationContext());
                 }
             }
