@@ -25,3 +25,13 @@ We were both very busy will projects from other courses so not much was accompli
 *Attempting to finally seize control of the GPS on the newly acquired rooted Android device
 *Possibly have a map loaded onto the application to provide a functional demo
 *Review the code and simulator sent to us to get an idea of what we are working with, what we can improve upon, and look into porting this code to the Android application in the future
+
+REVIEW:
+Succesfully obtained control of the GPS unit and can be toggled in the application
+Reviewed simulator to learn how it worked and what conditions it was testing (proved to not be very useful in our algorithm)
+
+10/11/2019 - 10/18/2019 (Stephen Marhefka)
+-----------------------
+*Porting some of the components of the simulator/developing our own portions of the algorithm
+*Add map to our Android app along with obtaining users current location and speed
+*Meet with Dr. Mosse on 10/17/2019 to review progress & issues
