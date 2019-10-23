@@ -6,4 +6,17 @@
     android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MapsActivity" />
+    tools:context=".MapsActivity" >
+
+    <TextView
+        android:id="@+id/VelocityView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0 m/s"
+        android:textSize="32sp"
+        map:layout_constraintBottom_toBottomOf="parent"
+        map:layout_constraintLeft_toLeftOf="parent"
+        map:layout_constraintRight_toRightOf="parent"
+        map:layout_constraintTop_toTopOf="parent"
+        map:layout_constraintVertical_bias="0.149" />
+</fragment>

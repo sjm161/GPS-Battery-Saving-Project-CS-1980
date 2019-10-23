@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -13,6 +14,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -29,19 +31,56 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Location currentLocation;
     private GoogleMap mMap;
     LocationManager LocM;
+    LocationListener newlistener;
+    TextView velocitydisplay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_maps);
+        velocitydisplay = findViewById(R.id.VelocityView);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
+        setnewLocationListener();
+        LocM = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        try {
+            LocM.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, newlistener);
+        }
+        catch (SecurityException e){
+            velocitydisplay.setText(e.getMessage());
+        }
+        //velocitydisplay.setText("testing 123");
     }
     private void fetchlastlocation(){
 
+    }
+    private void setnewLocationListener(){
+        newlistener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                velocitydisplay.setText("Trying to get velocity");
+                if(location.hasSpeed())
+                    velocitydisplay.setText(String.valueOf(location.getSpeed()) + " m/s");
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+        };
     }
 
 
@@ -61,6 +100,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
+        //Now to get the user's live speed
+
         // Add a marker in Sydney and move the camera
       /*  LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
