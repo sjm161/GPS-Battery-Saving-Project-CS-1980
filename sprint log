@@ -35,3 +35,13 @@ Reviewed simulator to learn how it worked and what conditions it was testing (pr
 *Porting some of the components of the simulator/developing our own portions of the algorithm
 *Add map to our Android app along with obtaining users current location and speed
 *Meet with Dr. Mosse on 10/17/2019 to review progress & issues
+
+REVIEW:
+Map screen was added to app as well as getting the user's location and speed. Meeting with Dr. Mosse went okay, he sent us some graphs and additional data produced by the students who made the simulator. 
+
+10/18/2019 - 10/25/2019 (Matthew Borbonus)
+------------------------------------
+* Obtaining/arranging the chance to acquire a power meter to measure the power consumption of the GPS components
+* Write Midterm paper
+* Create and rehearse Midterm presentation
+* Investigate GPS navigation and see if we can obtain the distance between each turn that the user makes
