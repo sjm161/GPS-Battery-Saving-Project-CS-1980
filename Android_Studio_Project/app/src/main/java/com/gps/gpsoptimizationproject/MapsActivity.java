@@ -14,6 +14,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -22,6 +23,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.IOException;
 import java.util.List;
@@ -44,8 +46,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        FloatingActionButton distbut = findViewById(R.id.dist);
+        distbut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               /* Snackbar.make(view, "Hello World Again!", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();*/
+
+            }
+        });
+
         setnewLocationListener();
         LocM = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
         try {
             LocM.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, newlistener);
         }
@@ -57,6 +70,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void fetchlastlocation(){
 
     }
+    private void calcdistance(){
+        
+    }
+
     private void setnewLocationListener(){
         newlistener = new LocationListener() {
             @Override
@@ -64,6 +81,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 velocitydisplay.setText("Trying to get velocity");
                 if(location.hasSpeed())
                     velocitydisplay.setText(String.valueOf(location.getSpeed()) + " m/s");
+
             }
 
             @Override
