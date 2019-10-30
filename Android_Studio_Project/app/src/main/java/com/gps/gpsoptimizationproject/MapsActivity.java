@@ -44,57 +44,49 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
         velocitydisplay = findViewById(R.id.VelocityView);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         FloatingActionButton distbut = findViewById(R.id.dist);
 
         destination = new Location("");
         destination.setLatitude(40.444396);
         destination.setLongitude(-79.954794);
+
         distbut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               /* Snackbar.make(view, "Hello World Again!", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
-                calcdistance(destination);
-
+                calcDistance(destination);
             }
         });
         setnewLocationListener();
         LocM = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         try {
-            LocM.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, newlistener);
-        }
-        catch (SecurityException e){
+            LocM.requestSingleUpdate(LocationManager.GPS_PROVIDER, null);
+        } catch (SecurityException e){
             velocitydisplay.setText(e.getMessage());
         }
-        //velocitydisplay.setText("testing 123");
     }
+
     private void fetchlastlocation(){
 
     }
-    private void calcdistance(Location dest){
-        try {
 
-            //Location cur = LocM.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            Location cur = new Location("");
+    private void calcDistance(Location dest) {
+        try {
+            Location cur = LocM.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            //Location cur = new Location("");
             cur.setLongitude(-79.953829);
             cur.setLatitude(40.442469);
-            if(cur == null)
+            if(cur == null) {
                 velocitydisplay.setText("Cur is null");
-            else {
+            } else {
                 float distance = cur.distanceTo(dest);
                 velocitydisplay.setText(String.valueOf(distance));
             }
-
-        }
-        catch (Exception e){
+        } catch (Exception e){
             velocitydisplay.setText(e.getMessage());
         }
-
-
     }
 
     private void setnewLocationListener(){
