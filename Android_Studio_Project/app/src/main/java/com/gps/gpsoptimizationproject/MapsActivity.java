@@ -63,6 +63,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         try {
             //LocM.requestSingleUpdate(LocationManager.GPS_PROVIDER, null);
+            LocM.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, newlistener);
         } catch (SecurityException e){
             velocitydisplay.setText(e.getMessage());
         }
