@@ -62,7 +62,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LocM = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         try {
-            LocM.requestSingleUpdate(LocationManager.GPS_PROVIDER, null);
+            //LocM.requestSingleUpdate(LocationManager.GPS_PROVIDER, null);
         } catch (SecurityException e){
             velocitydisplay.setText(e.getMessage());
         }
@@ -76,13 +76,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         try {
             Location cur = LocM.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             //Location cur = new Location("");
-            cur.setLongitude(-79.953829);
-            cur.setLatitude(40.442469);
+            //cur.setLongitude(-79.953829);
+            //cur.setLatitude(40.442469);
             if(cur == null) {
                 velocitydisplay.setText("Cur is null");
             } else {
                 float distance = cur.distanceTo(dest);
-                velocitydisplay.setText(String.valueOf(distance));
+                velocitydisplay.setText(String.valueOf(distance) + " || " + cur.getLatitude() + " || " + cur.getLongitude());
             }
         } catch (Exception e){
             velocitydisplay.setText(e.getMessage());
