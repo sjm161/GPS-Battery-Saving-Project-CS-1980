@@ -35,6 +35,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     LocationManager LocM;
     LocationListener newlistener;
     TextView velocitydisplay;
+    Location destination;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,15 +48,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         FloatingActionButton distbut = findViewById(R.id.dist);
+
+        destination = new Location("");
+        destination.setLatitude(40.444396);
+        destination.setLongitude(-79.954794);
         distbut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                /* Snackbar.make(view, "Hello World Again!", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();*/
+                calcdistance(destination);
 
             }
         });
-
         setnewLocationListener();
         LocM = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -70,18 +75,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void fetchlastlocation(){
 
     }
-    private void calcdistance(){
-        
+    private void calcdistance(Location dest){
+        try {
+
+            //Location cur = LocM.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            Location cur = new Location("");
+            cur.setLongitude(-79.953829);
+            cur.setLatitude(40.442469);
+            if(cur == null)
+                velocitydisplay.setText("Cur is null");
+            else {
+                float distance = cur.distanceTo(dest);
+                velocitydisplay.setText(String.valueOf(distance));
+            }
+
+        }
+        catch (Exception e){
+            velocitydisplay.setText(e.getMessage());
+        }
+
+
     }
 
     private void setnewLocationListener(){
         newlistener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                velocitydisplay.setText("Trying to get velocity");
+                /*velocitydisplay.setText("Trying to get velocity");
                 if(location.hasSpeed())
                     velocitydisplay.setText(String.valueOf(location.getSpeed()) + " m/s");
-
+                    */
             }
 
             @Override
