@@ -1,18 +1,31 @@
-Trial 1 - 20 Mins - Screen On - App Open
+Trial 1 - 20 Mins - Screen On - App Open - Wall Charger
 GPS - On					GPS - Off
-682 mWh						304	mWh
-137 mAh						60	mAh
+682 mWh						304 mWh
+137 mAh						60  mAh
 00:20:15					00:05:47     (Actual Time On Meter)
 
+Trial 2 - 1 Min - Screen On - App Open - Wall Charger
+GPS - On					GPS - Off
+30 mWh						29 mWh
+6  mAh						5  mAh
 
+Trial 3 - 10 Mins - Screen On - App Open - Laptop
+GPS - On					 GPS - Off
+358 mWh						 209 mWh
+71  mAh						 41 mAh
+00:10:02					 00:09:57
 
+Trial 4 - 5 Mins - Screen On - App Open - Laptop (Anomaly?)
+GPS - On					 GPS - Off
+116 mWh						 147 mWh
+23  mAh						 29 mAh
+00:04:59					 00:05:02
 
-
-
-
-
-
-
+Trial 5 - 5 Mins - Screen On - App Open - Laptop
+GPS - On					 GPS - Off
+107 mWh						 105 mWh
+21  mAh						 21 mAh
+00:05:04					 00:05:03
 
 
 
