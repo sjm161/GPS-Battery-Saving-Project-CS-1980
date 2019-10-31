@@ -34,7 +34,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     LocationManager LocM;
     LocationListener newlistener;
-    TextView velocitydisplay;
+    TextView velocitydisplay, distancedisplay;
     Location destination;
 
     @Override
@@ -43,6 +43,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         setContentView(R.layout.activity_maps);
         velocitydisplay = findViewById(R.id.VelocityView);
+        distancedisplay = findViewById(R.id.DistanceView);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -62,7 +63,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LocM = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         try {
-            LocM.requestSingleUpdate(LocationManager.GPS_PROVIDER, null);
+            //LocM.requestSingleUpdate(LocationManager.GPS_PROVIDER, null);
+            LocM.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, newlistener);
         } catch (SecurityException e){
             velocitydisplay.setText(e.getMessage());
         }
@@ -76,13 +78,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         try {
             Location cur = LocM.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             //Location cur = new Location("");
-            cur.setLongitude(-79.953829);
-            cur.setLatitude(40.442469);
+            //cur.setLongitude(-79.953829);
+            //cur.setLatitude(40.442469);
             if(cur == null) {
-                velocitydisplay.setText("Cur is null");
+                distancedisplay.setText("Cur is null");
             } else {
                 float distance = cur.distanceTo(dest);
-                velocitydisplay.setText(String.valueOf(distance));
+                distancedisplay.setText(String.valueOf(distance) + " || " + cur.getLatitude() + " || " + cur.getLongitude());
             }
         } catch (Exception e){
             velocitydisplay.setText(e.getMessage());
@@ -93,10 +95,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         newlistener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                /*velocitydisplay.setText("Trying to get velocity");
+                velocitydisplay.setText("Trying to get velocity");
                 if(location.hasSpeed())
                     velocitydisplay.setText(String.valueOf(location.getSpeed()) + " m/s");
-                    */
+
             }
 
             @Override

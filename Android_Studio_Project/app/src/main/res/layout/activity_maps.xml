@@ -8,6 +8,7 @@
     android:layout_height="match_parent"
     tools:context=".MapsActivity" >
 
+
     <TextView
         android:id="@+id/VelocityView"
         android:layout_width="wrap_content"
@@ -19,13 +20,16 @@
         map:layout_constraintRight_toRightOf="parent"
         map:layout_constraintTop_toTopOf="parent"
         map:layout_constraintVertical_bias="0.149" />
-    <TextView
+   <TextView
         android:id="@+id/DistanceView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="0 m"
         android:textSize="32sp"
-        map:layout_gravity="bottom|"
+        android:layout_gravity="top|left"
+        android:layout_marginTop="40dp"
+        map:layout_constraintTop_toBottomOf="@+id/VelocityView"
+        map:layout_constraintBottom_toBottomOf="parent"
         map:layout_constraintVertical_bias="0.149" />
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/dist"
@@ -33,5 +37,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        map:srcCompat="@android:drawable/ic_dialog_email" />
+        android:backgroundTint="@android:color/holo_purple"
+        map:srcCompat="@android:drawable/ic_menu_compass" />
 </fragment>
