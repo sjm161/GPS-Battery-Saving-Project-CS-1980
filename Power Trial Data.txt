@@ -27,6 +27,17 @@ GPS - On					 GPS - Off
 21  mAh						 21 mAh
 00:05:04					 00:05:03
 
+Trial 6 - 2 Mins - Screen On - App Open - Laptop
+GPS - On					 GPS - Off
+73 mWh						 65 mWh
+14  mAh						 12 mAh
+00:02:04					 00:02:03
+
+Trial 7 - 1 Min - Screen On - App Open - Laptop
+GPS - On					 GPS - Off
+39 mWh						 38 mWh
+7  mAh						 7 mAh
+00:01:02					 00:01:02
 
 
 (Flawed Run - Relied on Power Meter timer rather than RTS)
