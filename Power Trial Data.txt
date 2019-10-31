@@ -1,0 +1,10 @@
+
+
+(Flawed Run - Relied on Power Meter timer rather than RTS)
+35 mins with GPS
+169mAh
+851mWh
+
+11:31 mins without GPS
+71mAh
+359mWh
