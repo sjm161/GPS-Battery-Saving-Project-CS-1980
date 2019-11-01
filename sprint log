@@ -37,7 +37,8 @@ Reviewed simulator to learn how it worked and what conditions it was testing (pr
 *Meet with Dr. Mosse on 10/17/2019 to review progress & issues
 
 REVIEW:
-Map screen was added to app as well as getting the user's location and speed. Meeting with Dr. Mosse went okay, he sent us some graphs and additional data produced by the students who made the simulator. 
+Map screen was added to app as well as getting the user's location and speed
+Meeting with Dr. Mosse went okay, he sent us some graphs and additional data produced by the students who made the simulator
 
 10/18/2019 - 10/25/2019 (Matthew Borbonus)
 -----------------------
@@ -46,5 +47,12 @@ Map screen was added to app as well as getting the user's location and speed. Me
 * Create and rehearse Midterm presentation
 * Investigate GPS navigation and see if we can obtain the distance between each turn that the user makes
 
+REVIEW:
+Obtained the power meter on the 24th, not entirely sure how to interpret its data fully
+Midterm presentation and paper went well, Luis seemed pleased with our progress and presentation
+
 10/25/2019 - 11/1/2019 (Stephen Marhefka)
 ----------------------
+*Get preliminary power measurements with GPS on and off
+*Calculate distance between users current location and a set location
+*Determine estimated amount of time required to reach destination from curreltn location

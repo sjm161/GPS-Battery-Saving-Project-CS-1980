@@ -12,6 +12,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+//import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -34,7 +36,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     LocationManager LocM;
     LocationListener newlistener;
-    TextView velocitydisplay, distancedisplay;
+    TextView velocitydisplay, distancedisplay, timedisplay;
     Location destination;
 
     @Override
@@ -44,6 +46,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
         velocitydisplay = findViewById(R.id.VelocityView);
         distancedisplay = findViewById(R.id.DistanceView);
+        timedisplay = findViewById(R.id.TimeView);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -73,9 +76,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void fetchlastlocation(){
 
     }
+    /*protected void createLocationRequest(){
+        LocationRequest LocR = LocationRequest.create();
+
+    }*/
+
 
     private void calcDistance(Location dest) {
         try {
+            LocationManager tempmanager;
+            //tempmanager.requestSingleUpdate( LocationManager.GPS_PROVIDER, new MyLocationListenerGPS(), null );
             Location cur = LocM.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             //Location cur = new Location("");
             //cur.setLongitude(-79.953829);
@@ -90,14 +100,39 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             velocitydisplay.setText(e.getMessage());
         }
     }
+    private float calcDistance(Location cur, Location dest) {
+        try {
+            //Location cur = LocM.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            //Location cur = new Location("");
+            //cur.setLongitude(-79.953829);
+            //cur.setLatitude(40.442469);
+            if(cur == null) {
+                distancedisplay.setText("Cur is null");
+                return 0f;
+            } else {
+                float distance = cur.distanceTo(dest);
+                //distancedisplay.setText(String.valueOf(distance) + " || " + cur.getLatitude() + " || " + cur.getLongitude());
+
+                distancedisplay.setText(String.valueOf(distance) + " m");
+                return distance;
+            }
+        } catch (Exception e){
+            velocitydisplay.setText(e.getMessage());
+        }
+        return 0f;
+    }
 
     private void setnewLocationListener(){
         newlistener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
                 velocitydisplay.setText("Trying to get velocity");
-                if(location.hasSpeed())
+                if(location.hasSpeed()) {
+
                     velocitydisplay.setText(String.valueOf(location.getSpeed()) + " m/s");
+                    float time = calcDistance(location, destination)/location.getSpeed();
+                    timedisplay.setText(String.valueOf(time) + " s");
+                }
 
             }
 
