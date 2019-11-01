@@ -90,7 +90,10 @@ public class MainActivity extends AppCompatActivity {
     current version of android*/
 
     private void turnGpsOn (Context context) {
-        beforeEnable = Settings.Secure.getString (context.getContentResolver(),
+        //startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+        //Notes from Matt
+        //This code here seems to not use caching as it can take a while to reacquire the GPS signal....
+        /*beforeEnable = Settings.Secure.getString (context.getContentResolver(),
                 Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
         String newSet = String.format ("%s,%s",
                 beforeEnable,
@@ -103,11 +106,15 @@ public class MainActivity extends AppCompatActivity {
             //Let's add in some error checking - lets set one of the text views to an error message
             //for exception handling
             MainText.setText(e.getMessage());
-        }
+        }*/
+        //boolean gpsStatus = locmanager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        //This modified line seems to acquire the GPS signal quickly
+        Settings.Secure.putString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED, "network,gps");
     }
 
 
     private void turnGpsOff (Context context) {
+        //LocationServices.SettingsApi
         if (null == beforeEnable) {
             String str = Settings.Secure.getString (context.getContentResolver(),
                     Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
