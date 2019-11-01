@@ -3,9 +3,9 @@
 #Import statements
 import datetime
 #This will be the power testing script for testing if the GPS can turn on and off
-
+now = datetime.datetime.now()
 #First open the logfile
-logfile = open("powerlogsamplefile.txt", "w")
+logfile = open("powerlogsamplefile " + str(now.date()) + " " + str(now.time())[:8].replace(":", "-") +".txt", "w")
 
 #Declaring variables, currently in testing mode with flat values
 amps = 0.5
