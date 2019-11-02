@@ -2,6 +2,10 @@ package com.gps.gpsoptimizationproject;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.GnssStatus;
+import android.location.GpsStatus;
+import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 
@@ -21,15 +25,20 @@ import android.widget.TextView;
 import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity {
+    static LocationListener templistener;
+    static LocationManager GPSDetector;
     static boolean textstatus = false;
     static String beforeEnable;
     static TextView MainText;
+    static TextView GPSText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //declaring the menu items that were created in the xml files
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        GPSText = findViewById(R.id.GPSStatus);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -60,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        //Now to add the GPS Status listener
+        setUpGpsListener();
 
     }
 
@@ -146,10 +157,69 @@ public class MainActivity extends AppCompatActivity {
             MainText.setText(e.getMessage());
         }
     }
+    //Okay- this is code to detect when the sattelite is connected
+    private void setUpGpsListener(){
+        //First initialize the GPS Locator
+        GPSDetector = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        setnewLocationListener();
+        try{
+            //Now add a GPS Status listener
+            GPSDetector.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, templistener);
+            @Deprecated GpsStatus.Listener test = new GpsStatus.Listener() {
+                //Now to implement a listener
+                @Override
+                public void onGpsStatusChanged(int event) {
+                    switch (event){
+                        case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
+                            break;
+                        case GpsStatus.GPS_EVENT_FIRST_FIX:   // this means you  found GPS Co-ordinates
+                            GPSText.setText("Got First Fix");
+                            break;
+                        case GpsStatus.GPS_EVENT_STARTED:
+                            GPSText.setText("GPS Started!");
+                            break;
+                        case GpsStatus.GPS_EVENT_STOPPED:
+                            GPSText.setText("GPS Stopped");
+                            break;
+
+                    }
+                }
+            };
+            GPSDetector.addGpsStatusListener(test);
+        }catch (SecurityException e){
+            MainText.setText(e.getMessage());
+        }
+        catch (Exception e){
+            MainText.setText(e.getMessage());
+        }
+    }
+
     private void moveToMapActivity(){
         Intent intent = new Intent(MainActivity.this, MapsActivity.class);
         startActivity(intent);
     }
 
+    private void setnewLocationListener(){
+       templistener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
 
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+        };
+    }
 }

@@ -32,6 +32,7 @@ import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
+    //Declaring objects for use
     Location currentLocation;
     private GoogleMap mMap;
     LocationManager LocM;
@@ -44,6 +45,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_maps);
+        //Declare the textboxs within the context of the code
         velocitydisplay = findViewById(R.id.VelocityView);
         distancedisplay = findViewById(R.id.DistanceView);
         timedisplay = findViewById(R.id.TimeView);
@@ -55,7 +57,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         destination = new Location("");
         destination.setLatitude(40.444396);
         destination.setLongitude(-79.954794);
-
+        //Setup the listener for the floating button
         distbut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -63,6 +65,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
         setnewLocationListener();
+        //Declare a location Manager
         LocM = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         try {
