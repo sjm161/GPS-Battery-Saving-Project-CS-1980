@@ -112,8 +112,8 @@ public class MainActivity extends AppCompatActivity {
                 try{
                     Date now = new Date();
                     String output = "LOOPEND|" + (sumtime/(double)numtimes) + "|" + (int)((sumtime/(double)numtimes) *0.0000010) +"ms|" + now.toString() + "\n";
-                    fos.write("------------------------------------------------------\n".getBytes());
                     fos.write(output.getBytes());
+                    fos.write("------------------------------------------------------\n".getBytes());
 
                 }catch(Exception e){
 
@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 turnGpsOn(getApplicationContext());
                 MainText.setText("GPS Turn On Called!");
-                h.postDelayed(rOff, 60000);
+                h.postDelayed(rOff, 180000);
             }
         };
         rOff = new Runnable(){
