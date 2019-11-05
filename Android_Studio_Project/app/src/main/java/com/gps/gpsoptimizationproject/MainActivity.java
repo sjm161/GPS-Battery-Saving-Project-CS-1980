@@ -120,7 +120,12 @@ public class MainActivity extends AppCompatActivity {
         }*/
         //boolean gpsStatus = locmanager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         //This modified line seems to acquire the GPS signal quickly
-        Settings.Secure.putString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED, "network,gps");
+        try {
+            Settings.Secure.putString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED, "network,gps");
+        }
+        catch (Exception e){
+            MainText.setText(e.getMessage());
+        }
     }
 
 
@@ -136,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
                 str = "";
                 int j = 0;
                 for (int i = 0; i < list.length; i++) {
-                    if (!list[i].equals (LocationManager.GPS_PROVIDER)) {
+                    if (!list[i].equals("network") && !list[i].equals("gps")) {
                         if (j > 0) {
                             str += ",";
                         }
@@ -145,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 beforeEnable = str;
+                GPSText.setText(str);
             }
         }
         try {
@@ -164,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
         setnewLocationListener();
         try{
             //Now add a GPS Status listener
-            GPSDetector.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, templistener);
+            GPSDetector.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, -1, templistener);
             @Deprecated GpsStatus.Listener test = new GpsStatus.Listener() {
                 //Now to implement a listener
                 @Override
