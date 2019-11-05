@@ -5,7 +5,9 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -15,6 +17,7 @@ import android.location.LocationManager;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.SyncStateContract;
 import android.view.View;
 import android.widget.TextView;
 
@@ -28,6 +31,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -39,6 +43,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     LocationListener newlistener;
     TextView velocitydisplay, distancedisplay, timedisplay;
     Location destination;
+    ArrayList<Location> staticroute;
+    int ListI = 0;
+    boolean navigation = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +61,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
         FloatingActionButton distbut = findViewById(R.id.dist);
 
+        staticroute = new ArrayList<Location>();
+        createstaticroute();
+
         destination = new Location("");
         destination.setLatitude(40.444396);
         destination.setLongitude(-79.954794);
@@ -61,7 +71,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         distbut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                calcDistance(destination);
+                //calcDistance(destination);
+                //navigation();
+                navigation = !navigation;
             }
         });
         setnewLocationListener();
@@ -74,16 +86,49 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } catch (SecurityException e){
             velocitydisplay.setText(e.getMessage());
         }
+
     }
 
-    private void fetchlastlocation(){
+    private void createstaticroute(){
 
+        Location one = new Location("");
+        one.setLatitude(40.443162);
+        one.setLongitude(-79.953543);
+
+        Location two = new Location("");
+        two.setLatitude(40.443918);
+        two.setLongitude(-79.950732);
+
+        Location three = new Location("");
+        three.setLatitude(40.445065);
+        three.setLongitude(-79.951263);
+
+        Location four = new Location("");
+        four.setLatitude(40.445179);
+        four.setLongitude(-79.950357);
+
+        staticroute.add(one);
+        staticroute.add(two);
+        staticroute.add(three);
+        staticroute.add(four);
     }
     /*protected void createLocationRequest(){
         LocationRequest LocR = LocationRequest.create();
 
     }*/
 
+    private void navigation(){
+
+        Intent intent = new Intent("Intersection Test");
+        PendingIntent pendingIntent = PendingIntent.getService(this, 0, intent, 0);
+
+        try {
+            destination = staticroute.get(1);
+            LocM.addProximityAlert(staticroute.get(1).getLatitude(), staticroute.get(1).getLongitude(), 15, -1, pendingIntent);
+        }catch(SecurityException e){
+            timedisplay.setText(e.getMessage());
+        }
+    }
 
     private void calcDistance(Location dest) {
         try {
@@ -136,6 +181,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     float time = calcDistance(location, destination)/location.getSpeed();
                     timedisplay.setText(String.valueOf(time) + " s");
                 }
+                if(navigation){
+                    if(location.distanceTo(destination) <= 15)
+                        setDestination();
+                }
 
             }
 
@@ -154,6 +203,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
         };
+    }
+    private void setDestination(){
+        ListI++;
+        if(ListI == staticroute.size()) {
+            navigation = false;
+            ListI = -1;
+        }
+        else {
+            destination = staticroute.get(ListI);
+        }
     }
 
 
