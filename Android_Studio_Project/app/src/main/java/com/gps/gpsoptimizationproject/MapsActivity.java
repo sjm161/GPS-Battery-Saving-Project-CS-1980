@@ -26,7 +26,9 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 //import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -46,6 +48,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     ArrayList<Location> staticroute;
     int ListI = 0;
     boolean navigation = false;
+    Marker destMarker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +67,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         staticroute = new ArrayList<Location>();
         createstaticroute();
 
-        destination = new Location("");
+        /*destination = new Location("");
         destination.setLatitude(40.444396);
-        destination.setLongitude(-79.954794);
+        destination.setLongitude(-79.954794);*/
         //Setup the listener for the floating button
         distbut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,6 +77,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 //calcDistance(destination);
                 //navigation();
                 navigation = !navigation;
+                if(navigation){
+                    //We started navigation - so start a new run
+                    ListI = 0;
+                    distancedisplay.setText("0 m");
+                    timedisplay.setText("0 s");
+                    //Acquire the new destination
+                    destination = staticroute.get(ListI);
+                    //Add it to the map
+                    LatLng destLL = new LatLng(destination.getLatitude(),destination.getLongitude());
+                    MarkerOptions destMarkerOptions = new MarkerOptions().position(destLL).title("Next Destination").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+                    //Add it to the map and save it in an object that we can use to remove it
+                    destMarker = mMap.addMarker(destMarkerOptions);
+
+                }
+                else{
+                    //We disabled navigation - remove the current marker
+                    destMarker.remove();
+                    distancedisplay.setText("");
+                    timedisplay.setText("");
+                }
             }
         });
         setnewLocationListener();
@@ -169,7 +192,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         return 0f;
     }
-
+    //This function creates a location listener - which handles detecting location changes- we don't
+    //have a need for the other functions - as they are not as efficient as we want them to be and don't do what we need them to do
     private void setnewLocationListener(){
         newlistener = new LocationListener() {
             @Override
@@ -178,8 +202,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 if(location.hasSpeed()) {
 
                     velocitydisplay.setText(String.valueOf(location.getSpeed()) + " m/s");
-                    float time = calcDistance(location, destination)/location.getSpeed();
-                    timedisplay.setText(String.valueOf(time) + " s");
+                    //If we are navigating - calculate distance to the next destination
+                    if(navigation) {
+                        float time = calcDistance(location, destination) / location.getSpeed();
+                        timedisplay.setText(String.valueOf(time) + " s");
+                    }
                 }
                 if(navigation){
                     if(location.distanceTo(destination) <= 15)
@@ -204,14 +231,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         };
     }
+    //A function for handling the acquisition of the next position in a route
     private void setDestination(){
         ListI++;
         if(ListI == staticroute.size()) {
+            destMarker.remove();
             navigation = false;
-            ListI = -1;
+            ListI = 0;
+            velocitydisplay.setText("");
+            distancedisplay.setText("");
+            timedisplay.setText("");
         }
         else {
+            //Remove the current marker from the map
+            destMarker.remove();
+            //Acquire the new destination
             destination = staticroute.get(ListI);
+            //Create a marker at that point
+            LatLng destLL = new LatLng(destination.getLatitude(),destination.getLongitude());
+            MarkerOptions destMarkerOptions = new MarkerOptions().position(destLL).title("Next Destination").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+            //Add it to the map and save it in an object that we can use to remove it
+            destMarker = mMap.addMarker(destMarkerOptions);
         }
     }
 

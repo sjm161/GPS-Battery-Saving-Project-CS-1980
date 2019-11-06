@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         logfile = new File(getApplicationContext().getFilesDir() + "/TimingLog.txt");
         //Initialize the log file
         try {
-            fos = new FileOutputStream(logfile);
+            fos = new FileOutputStream(logfile, true);
             Date now = new Date();
             String output = "APPSTART|" + now.toString() + "\n";
             fos.write(output.getBytes());
