@@ -17,6 +17,7 @@ import android.location.LocationManager;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.provider.SyncStateContract;
 import android.view.View;
 import android.widget.TextView;
@@ -32,8 +33,12 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -49,6 +54,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     int ListI = 0;
     boolean navigation = false;
     Marker destMarker;
+    File logfile = null;
+    FileOutputStream fos = null;
+    String beforeEnable = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +67,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         velocitydisplay = findViewById(R.id.VelocityView);
         distancedisplay = findViewById(R.id.DistanceView);
         timedisplay = findViewById(R.id.TimeView);
+
+        try{
+            logfile = new File(getApplicationContext().getFilesDir() + "/GPSLog.txt");
+            fos = new FileOutputStream(logfile, true);
+        }catch(FileNotFoundException e){
+            try {
+                logfile.createNewFile();
+                fos = new FileOutputStream(logfile);
+            }catch(Exception ex){
+
+            }
+        }
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -86,7 +107,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     destination = staticroute.get(ListI);
                     //Add it to the map
                     LatLng destLL = new LatLng(destination.getLatitude(),destination.getLongitude());
-                    MarkerOptions destMarkerOptions = new MarkerOptions().position(destLL).title("Next Destination").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+                    MarkerOptions destMarkerOptions = new MarkerOptions().position(destLL).title("Next Destination").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
                     //Add it to the map and save it in an object that we can use to remove it
                     destMarker = mMap.addMarker(destMarkerOptions);
 
@@ -167,7 +188,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 float distance = cur.distanceTo(dest);
                 distancedisplay.setText(String.valueOf(distance) + " || " + cur.getLatitude() + " || " + cur.getLongitude());
             }
-        } catch (Exception e){
+        }catch(SecurityException se) {
+            velocitydisplay.setText(se.getMessage());
+        }
+        catch (Exception e){
             velocitydisplay.setText(e.getMessage());
         }
     }
@@ -209,7 +233,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                 }
                 if(navigation){
-                    if(location.distanceTo(destination) <= 15)
+                    if(location.distanceTo(destination) <= 20)
                         setDestination();
                 }
 
@@ -249,7 +273,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             destination = staticroute.get(ListI);
             //Create a marker at that point
             LatLng destLL = new LatLng(destination.getLatitude(),destination.getLongitude());
-            MarkerOptions destMarkerOptions = new MarkerOptions().position(destLL).title("Next Destination").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+            MarkerOptions destMarkerOptions = new MarkerOptions().position(destLL).title("Next Destination").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
             //Add it to the map and save it in an object that we can use to remove it
             destMarker = mMap.addMarker(destMarkerOptions);
         }
@@ -279,5 +303,49 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));*/
         
+    }
+    private void turnGpsOff (Context context) {
+        //LocationServices.SettingsApi
+        if (null == beforeEnable) {
+            String str = Settings.Secure.getString (context.getContentResolver(),
+                    Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+            if (null == str) {
+                str = "";
+            } else {
+                String[] list = str.split (",");
+                str = "";
+                int j = 0;
+                for (int i = 0; i < list.length; i++) {
+                    if (!list[i].equals("network") && !list[i].equals("gps")) {
+                        if (j > 0) {
+                            str += ",";
+                        }
+                        str += list[i];
+                        j++;
+                    }
+                }
+                beforeEnable = str;
+                //GPSText.setText(str);
+            }
+        }
+        try {
+            Settings.Secure.putString (context.getContentResolver(),
+                    Settings.Secure.LOCATION_PROVIDERS_ALLOWED,
+                    beforeEnable);
+        } catch(Exception e) {
+            //Let's add in some error checking - lets set one of the text views to an error message
+            //for exception handling
+            velocitydisplay.setText(e.getMessage());
+        }
+        Date now = new Date();
+    }
+    private void turnGpsOn (Context context) {
+
+        try {
+            Settings.Secure.putString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED, "network,gps");
+        }
+        catch (Exception e){
+            velocitydisplay.setText(e.getMessage());
+        }
     }
 }
