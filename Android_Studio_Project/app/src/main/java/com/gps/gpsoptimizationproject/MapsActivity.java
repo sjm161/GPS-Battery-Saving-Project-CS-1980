@@ -17,6 +17,7 @@ import android.location.LocationManager;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.provider.SyncStateContract;
 import android.view.View;
@@ -42,6 +43,11 @@ import java.util.Date;
 import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+    //Both time variables are currently in seconds
+    //On average, we can reacquire a signal in this amount of time
+    final float STDTIMEALLOWANCE = 36.59f;
+    //This is the amount of time the GPS needs to be off before we save power
+    final float POWERSAVINGSTIME = 10f;
 
     //Declaring objects for use
     Location currentLocation;
@@ -52,11 +58,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Location destination;
     ArrayList<Location> staticroute;
     int ListI = 0;
-    boolean navigation = false;
+    boolean navigation = false, logGPSOnLatLng = false;
     Marker destMarker;
     File logfile = null;
     FileOutputStream fos = null;
     String beforeEnable = "";
+    Runnable GPSON = null;
+    Handler h = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +79,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         try{
             logfile = new File(getApplicationContext().getFilesDir() + "/GPSLog.txt");
             fos = new FileOutputStream(logfile, true);
+            Date now = new Date();
+            String logstring = "APPSTART|"+now.toString() + "\n";
+            fos.write(logstring.getBytes());
         }catch(FileNotFoundException e){
             try {
                 logfile.createNewFile();
@@ -78,6 +89,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }catch(Exception ex){
 
             }
+        }catch(Exception ef){
+
         }
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -99,6 +112,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 //navigation();
                 navigation = !navigation;
                 if(navigation){
+                    try{
+                        //Log when the user starts the navigational app
+                        Date now = new Date();
+                        String logstring = "NAVSTART|" + now.toString() + "\n";
+                        fos.write("-------------------------------------------------------\n".getBytes());
+                        fos.write(logstring.getBytes());
+                    }catch(Exception e){
+                        velocitydisplay.setText(e.getMessage());
+                    }
                     //We started navigation - so start a new run
                     ListI = 0;
                     distancedisplay.setText("0 m");
@@ -117,6 +139,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     destMarker.remove();
                     distancedisplay.setText("");
                     timedisplay.setText("");
+                    try{
+                        //Log that the user stopped navigation manually
+                        Date now = new Date();
+                        String logstring = "NAVSTOP|MANUAL|" + now.toString() + "\n";
+
+                        fos.write(logstring.getBytes());
+                        fos.write("-------------------------------------------------------\n".getBytes());
+                    }catch(Exception e){
+                        velocitydisplay.setText(e.getMessage());
+                    }
                 }
             }
         });
@@ -130,7 +162,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } catch (SecurityException e){
             velocitydisplay.setText(e.getMessage());
         }
-
+        //create a new Runnable that will call the turn GPS On method after a certain amount of time that is inserted into the handler
+        GPSON = new Runnable() {
+            @Override
+            public void run() {
+                turnGpsOn(getApplicationContext());
+                //MainText.setText("GPS Turn On Called!");
+            }
+        };
     }
 
     private void createstaticroute(){
@@ -233,8 +272,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                 }
                 if(navigation){
-                    if(location.distanceTo(destination) <= 20)
-                        setDestination();
+                    if(location.distanceTo(destination) <= 20) {
+                        //We have reached our destination set a new destination
+                        if(setDestination()) {
+                            //Calculate time to the new destination
+                            float time = calcDistance(location, destination) / location.getSpeed();
+
+                            try{
+                                String logstring = "LOCOFF|" + location.getLatitude() + "|" + location.getLongitude() + "\n";
+                                fos.write(logstring.getBytes());
+                            }catch(Exception e){
+
+                            }
+                            calcGPSTurnOff(time);
+                        }
+                    }
+                }
+                //Check if we just turned the GPS On and need to log the first posible set of coordinates
+                if(logGPSOnLatLng){
+                    logGPSOnLatLng = false;
+                    try{
+                        String logstring = "LOCON|" + location.getLatitude() + "|" + location.getLongitude() + "\n";
+                        fos.write(logstring.getBytes());
+                    }catch(Exception e){
+                        logGPSOnLatLng = true;
+                    }
                 }
 
             }
@@ -256,15 +318,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         };
     }
     //A function for handling the acquisition of the next position in a route
-    private void setDestination(){
+    private boolean setDestination(){
         ListI++;
+        //Check if the user reached their destination
         if(ListI == staticroute.size()) {
             destMarker.remove();
             navigation = false;
             ListI = 0;
-            velocitydisplay.setText("");
+            //Set the two text boxes relevant only to a destination to off
             distancedisplay.setText("");
             timedisplay.setText("");
+            try{
+                //Log that the user has reached their destination
+                Date now = new Date();
+                String logstring = "NAVSTOP|FINALDEST|" + now.toString();
+
+                fos.write(logstring.getBytes());
+                fos.write("-------------------------------------------------------\n".getBytes());
+            }catch(Exception e){
+                velocitydisplay.setText(e.getMessage());
+            }
+            return false;
         }
         else {
             //Remove the current marker from the map
@@ -276,8 +350,52 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             MarkerOptions destMarkerOptions = new MarkerOptions().position(destLL).title("Next Destination").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
             //Add it to the map and save it in an object that we can use to remove it
             destMarker = mMap.addMarker(destMarkerOptions);
+            return true;
         }
     }
+    private void calcGPSTurnOff(float time){
+        float turnOffTime = time - STDTIMEALLOWANCE;
+        //If the odds of getting a new fix are lower than we like, don't bother shutting it off at all
+        if(turnOffTime <= 0){
+            try{
+                //Log that the time was too small for standard deviation of reacquiring signal
+                Date now = new Date();
+                String logstring = "GPSNOTOFF|UNDERSTD|" + turnOffTime + "|" + now.toString() + "\n";
+                fos.write(logstring.getBytes());
+            }catch(Exception e){
+                velocitydisplay.setText(e.getMessage());
+            }
+        }
+        //Conversely, if the time we're shutting it off for is too small for any noticeable savings
+        else if(turnOffTime <= POWERSAVINGSTIME){
+            try{
+                //Log that the time was too small for standard deviation of reacquiring signal
+                Date now = new Date();
+                String logstring = "GPSNOTOFF|UNDERPOWERSAVINGS|" + turnOffTime + "|" + now.toString() + "\n";
+                fos.write(logstring.getBytes());
+            }catch(Exception e){
+                velocitydisplay.setText(e.getMessage());
+            }
+        }
+        //We have enough time. Turn the GPS off and then back on again
+        else{
+            try{
+                //Log that the time was too small for standard deviation of reacquiring signal
+                Date now = new Date();
+                String logstring = "ETAOFF|" + turnOffTime +"|" + now.toString() + "\n";
+                fos.write(logstring.getBytes());
+            }catch(Exception e){
+                velocitydisplay.setText(e.getMessage());
+            }
+            //Shut it off
+            turnGpsOff(getApplicationContext());
+            //Convert from seconds to milliseconds for the runnable
+            long milliseconds = (long)(turnOffTime * 1000);
+            //Call the GPS ON Method after
+            h.postDelayed(GPSON, milliseconds);
+        }
+    }
+
 
 
     /**
@@ -338,7 +456,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             velocitydisplay.setText(e.getMessage());
         }
         Date now = new Date();
+        String logstring = "GPSOFF|" + now.toString() + "\n";
+        try {
+            fos.write(logstring.getBytes());
+        }catch(Exception e){
+            velocitydisplay.setText(e.getMessage());
+        }
     }
+    //Same function from MainActivity for turning the GPS ON
     private void turnGpsOn (Context context) {
 
         try {
@@ -347,5 +472,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         catch (Exception e){
             velocitydisplay.setText(e.getMessage());
         }
+        Date now = new Date();
+        String logstring = "GPSON|" + now.toString() + "\n";
+        try {
+            fos.write(logstring.getBytes());
+        }catch(Exception e){
+            velocitydisplay.setText(e.getMessage());
+        }
+        //We set the GPS to on, get the first coordinates that we can
+        logGPSOnLatLng = true;
     }
 }
