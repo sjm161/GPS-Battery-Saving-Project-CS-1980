@@ -166,8 +166,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         GPSON = new Runnable() {
             @Override
             public void run() {
-                turnGpsOn(getApplicationContext());
-                //MainText.setText("GPS Turn On Called!");
+                //turnGpsOn(getApplicationContext());
+                logGPSOn();
             }
         };
     }
@@ -269,6 +269,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     if(navigation) {
                         float time = calcDistance(location, destination) / location.getSpeed();
                         timedisplay.setText(String.valueOf(time) + " s");
+                        try{
+                            Date now = new Date();
+                            String logstring = "CURLOC|" + location.getLatitude() + "|" + location.getLongitude() + "|" + location.getSpeed() +"m/s|" + location.distanceTo(destination) + "m|" + now.toString()  +"\n";
+                            fos.write(logstring.getBytes());
+                        }catch(Exception e){
+                            logGPSOnLatLng = true;
+                        }
                     }
                 }
                 if(navigation){
@@ -279,7 +286,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             float time = calcDistance(location, destination) / location.getSpeed();
 
                             try{
-                                String logstring = "LOCOFF|" + location.getLatitude() + "|" + location.getLongitude() + "\n";
+                                Date now = new Date();
+                                String logstring = "LOCOFF|" + location.getLatitude() + "|" + location.getLongitude() + "|" + now.toString()  +"\n";
                                 fos.write(logstring.getBytes());
                             }catch(Exception e){
 
@@ -292,12 +300,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 if(logGPSOnLatLng){
                     logGPSOnLatLng = false;
                     try{
-                        String logstring = "LOCON|" + location.getLatitude() + "|" + location.getLongitude() + "\n";
+                        Date now = new Date();
+                        String logstring = "LOCON|" + location.getLatitude() + "|" + location.getLongitude() + "|" + now.toString()  + "\n";
                         fos.write(logstring.getBytes());
                     }catch(Exception e){
                         logGPSOnLatLng = true;
                     }
                 }
+
 
             }
 
@@ -388,11 +398,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 velocitydisplay.setText(e.getMessage());
             }
             //Shut it off
-            turnGpsOff(getApplicationContext());
+            //turnGpsOff(getApplicationContext());
+            logGPSOff();
             //Convert from seconds to milliseconds for the runnable
             long milliseconds = (long)(turnOffTime * 1000);
             //Call the GPS ON Method after
             h.postDelayed(GPSON, milliseconds);
+        }
+    }
+    private void logGPSOff(){
+        Date now = new Date();
+        String logstring = "GPSLOFF|" + now.toString() + "\n";
+        try {
+            fos.write(logstring.getBytes());
+        }catch(Exception e){
+            velocitydisplay.setText(e.getMessage());
+        }
+    }
+    private void logGPSOn(){
+        Date now = new Date();
+        String logstring = "GPSLON|" + now.toString() + "\n";
+        try {
+            fos.write(logstring.getBytes());
+        }catch(Exception e){
+            velocitydisplay.setText(e.getMessage());
         }
     }
 
