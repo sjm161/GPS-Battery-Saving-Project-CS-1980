@@ -1,33 +1,23 @@
 package com.gps.gpsoptimizationproject;
 
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.FragmentActivity;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.provider.SyncStateContract;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-//import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -37,10 +27,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
     //Both time variables are currently in seconds
@@ -56,7 +44,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     LocationListener newlistener;
     TextView velocitydisplay, distancedisplay, timedisplay;
     Location destination;
-    ArrayList<Location> staticroute;
+    ArrayList<Location> staticRoute;
     int ListI = 0;
     boolean navigation = false, logGPSOnLatLng = false, testOvershot = false, firstOvershot=false;
     Marker destMarker;
@@ -77,20 +65,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         distancedisplay = findViewById(R.id.DistanceView);
         timedisplay = findViewById(R.id.TimeView);
 
-        try{
+        try {
             logfile = new File(getApplicationContext().getFilesDir() + "/GPSLog.txt");
             fos = new FileOutputStream(logfile, true);
             Date now = new Date();
             String logstring = "APPSTART|"+now.toString() + "\n";
             fos.write(logstring.getBytes());
-        }catch(FileNotFoundException e){
+        } catch(FileNotFoundException e) {
             try {
                 logfile.createNewFile();
                 fos = new FileOutputStream(logfile);
-            }catch(Exception ex){
+            } catch(Exception ex) {
 
             }
-        }catch(Exception ef){
+        } catch(Exception ef) {
 
         }
 
@@ -99,8 +87,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
         FloatingActionButton distbut = findViewById(R.id.dist);
 
-        staticroute = new ArrayList<Location>();
-        createstaticroute();
+        staticRoute = new ArrayList<Location>();
+        Bundle extras = getIntent().getExtras();
+        boolean select = extras.getBoolean("routeSelect");
+        if(select == true) {
+            createHomeRoute();
+        } else {
+            createPittRoute();
+        }
 
         /*destination = new Location("");
         destination.setLatitude(40.444396);
@@ -109,8 +103,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         distbut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //calcDistance(destination);
-                //navigation();
                 navigation = !navigation;
                 if(navigation){
                     try{
@@ -127,7 +119,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     distancedisplay.setText("0 m");
                     timedisplay.setText("0 s");
                     //Acquire the new destination
-                    destination = staticroute.get(ListI);
+                    destination = staticRoute.get(ListI);
                     //Add it to the map
                     LatLng destLL = new LatLng(destination.getLatitude(),destination.getLongitude());
                     MarkerOptions destMarkerOptions = new MarkerOptions().position(destLL).title("Next Destination").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
@@ -153,7 +145,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
         });
-        setnewLocationListener();
+        setNewLocationListener();
         //Declare a location Manager
         LocM = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -173,8 +165,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         };
     }
 
-    private void createstaticroute(){
-
+    //creates route to Pitt
+    private void createPittRoute(){
         Location one = new Location("");
         one.setLatitude(40.443162);
         one.setLongitude(-79.953543);
@@ -191,15 +183,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         four.setLatitude(40.445179);
         four.setLongitude(-79.950357);
 
-        staticroute.add(one);
-        staticroute.add(two);
-        staticroute.add(three);
-        staticroute.add(four);
+        staticRoute.add(one);
+        staticRoute.add(two);
+        staticRoute.add(three);
+        staticRoute.add(four);
     }
-    /*protected void createLocationRequest(){
-        LocationRequest LocR = LocationRequest.create();
 
-    }*/
+    //creates route to home
+    private void createHomeRoute(){
+        Location one = new Location("");
+        one.setLatitude(40.445179);
+        one.setLongitude(-79.950357);
+
+        Location two = new Location("");
+        two.setLatitude(40.445065);
+        two.setLongitude(-79.951263);
+
+        Location three = new Location("");
+        three.setLatitude(40.443918);
+        three.setLongitude(-79.950732);
+
+        Location four = new Location("");
+        four.setLatitude(40.443162);
+        four.setLongitude(-79.953543);
+
+        staticRoute.add(one);
+        staticRoute.add(two);
+        staticRoute.add(three);
+        staticRoute.add(four);
+    }
 
     private void navigation(){
 
@@ -207,8 +219,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         PendingIntent pendingIntent = PendingIntent.getService(this, 0, intent, 0);
 
         try {
-            destination = staticroute.get(1);
-            LocM.addProximityAlert(staticroute.get(1).getLatitude(), staticroute.get(1).getLongitude(), 15, -1, pendingIntent);
+            destination = staticRoute.get(1);
+            LocM.addProximityAlert(staticRoute.get(1).getLatitude(), staticRoute.get(1).getLongitude(), 15, -1, pendingIntent);
         }catch(SecurityException e){
             timedisplay.setText(e.getMessage());
         }
@@ -237,10 +249,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
     private float calcDistance(Location cur, Location dest) {
         try {
-            //Location cur = LocM.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            //Location cur = new Location("");
-            //cur.setLongitude(-79.953829);
-            //cur.setLatitude(40.442469);
             if(cur == null) {
                 distancedisplay.setText("Cur is null");
                 return 0f;
@@ -256,9 +264,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         return 0f;
     }
+
     //This function creates a location listener - which handles detecting location changes- we don't
     //have a need for the other functions - as they are not as efficient as we want them to be and don't do what we need them to do
-    private void setnewLocationListener(){
+    private void setNewLocationListener(){
         newlistener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
@@ -363,7 +372,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private boolean setDestination(){
         ListI++;
         //Check if the user reached their destination
-        if(ListI == staticroute.size()) {
+        if(ListI == staticRoute.size()) {
             destMarker.remove();
             navigation = false;
             ListI = 0;
@@ -386,7 +395,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             //Remove the current marker from the map
             destMarker.remove();
             //Acquire the new destination
-            destination = staticroute.get(ListI);
+            destination = staticRoute.get(ListI);
             //Create a marker at that point
             LatLng destLL = new LatLng(destination.getLatitude(),destination.getLongitude());
             MarkerOptions destMarkerOptions = new MarkerOptions().position(destLL).title("Next Destination").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
@@ -460,8 +469,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         firstOvershot = true;
     }
 
-
-
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -488,7 +495,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
     private void turnGpsOff (Context context) {
         //LocationServices.SettingsApi
-        if (null == beforeEnable) {
+        if(null == beforeEnable) {
             String str = Settings.Secure.getString (context.getContentResolver(),
                     Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
             if (null == str) {
@@ -548,4 +555,5 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         testOvershot = true;
         firstOvershot = true;
     }
+
 }

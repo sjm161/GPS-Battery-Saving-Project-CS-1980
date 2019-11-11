@@ -9,9 +9,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -22,8 +19,6 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 public class MainActivity extends AppCompatActivity {
     static LocationListener templistener;
     static LocationManager GPSDetector;
@@ -31,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
     static String beforeEnable;
     static TextView MainText;
     static TextView GPSText;
+    static boolean route = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //declaring the menu items that were created in the xml files
@@ -40,19 +37,12 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         GPSText = findViewById(R.id.GPSStatus);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               /* Snackbar.make(view, "Hello World Again!", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
-               moveToMapActivity();
-            }
-        });
         final TextView gpsIndicator = (TextView) findViewById(R.id.GPSindicator);
-        MainText = (TextView) findViewById(R.id.MainTextView);
+        MainText = findViewById(R.id.MainTextView);
         //Making the button do something
-        Button gpsButton = (Button) findViewById(R.id.GPSToggle);
+        Button gpsButton = findViewById(R.id.GPSToggle);
+        Button pitt = findViewById(R.id.pitt);
+        Button home = findViewById(R.id.home);
 
         gpsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,18 +50,36 @@ public class MainActivity extends AppCompatActivity {
                 if(textstatus){
                     textstatus = false;
                     gpsIndicator.setText("GPS ON");
-                    turnGpsOn(getApplicationContext());
+                    turnGPSOn(getApplicationContext());
                 }
                 else{
                     textstatus = true;
                     gpsIndicator.setText("GPS OFF");
-                    turnGpsOff(getApplicationContext());
+                    turnGPSOff(getApplicationContext());
                 }
+            }
+        });
+
+        //sets route to home --> pitt
+        pitt.setOnClickListener(new View.OnClickListener() {
+            @Override
+           public void onClick(View v) {
+                route = false;
+                moveToMapActivity();
+           }
+
+        });
+
+        //sets route to pitt --> home
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                route = true;
+                moveToMapActivity();
             }
         });
         //Now to add the GPS Status listener
         setUpGpsListener();
-
     }
 
     @Override
@@ -100,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
     AS raises errors which means we need to figure out what does what and if this even works with
     current version of android*/
 
-    private void turnGpsOn (Context context) {
+    private void turnGPSOn (Context context) {
         //startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
         //Notes from Matt
         //This code here seems to not use caching as it can take a while to reacquire the GPS signal....
@@ -122,14 +130,12 @@ public class MainActivity extends AppCompatActivity {
         //This modified line seems to acquire the GPS signal quickly
         try {
             Settings.Secure.putString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED, "network,gps");
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             MainText.setText(e.getMessage());
         }
     }
 
-
-    private void turnGpsOff (Context context) {
+    private void turnGPSOff (Context context) {
         //LocationServices.SettingsApi
         if (null == beforeEnable) {
             String str = Settings.Secure.getString (context.getContentResolver(),
@@ -163,19 +169,20 @@ public class MainActivity extends AppCompatActivity {
             MainText.setText(e.getMessage());
         }
     }
-    //Okay- this is code to detect when the sattelite is connected
-    private void setUpGpsListener(){
+
+    //code to detect when the satellite is connected
+    private void setUpGpsListener() {
         //First initialize the GPS Locator
         GPSDetector = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         setnewLocationListener();
-        try{
+        try {
             //Now add a GPS Status listener
             GPSDetector.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, -1, templistener);
             @Deprecated GpsStatus.Listener test = new GpsStatus.Listener() {
                 //Now to implement a listener
                 @Override
                 public void onGpsStatusChanged(int event) {
-                    switch (event){
+                    switch (event) {
                         case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
                             break;
                         case GpsStatus.GPS_EVENT_FIRST_FIX:   // this means you  found GPS Co-ordinates
@@ -192,20 +199,20 @@ public class MainActivity extends AppCompatActivity {
                 }
             };
             GPSDetector.addGpsStatusListener(test);
-        }catch (SecurityException e){
+        } catch (SecurityException e) {
             MainText.setText(e.getMessage());
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             MainText.setText(e.getMessage());
         }
     }
 
-    private void moveToMapActivity(){
+    private void moveToMapActivity() {
         Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+        intent.putExtra("routeSelect", route);
         startActivity(intent);
     }
 
-    private void setnewLocationListener(){
+    private void setnewLocationListener() {
        templistener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
@@ -228,4 +235,5 @@ public class MainActivity extends AppCompatActivity {
             }
         };
     }
+
 }
