@@ -58,13 +58,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Location destination;
     ArrayList<Location> staticroute;
     int ListI = 0;
-    boolean navigation = false, logGPSOnLatLng = false;
+    boolean navigation = false, logGPSOnLatLng = false, testOvershot = false, firstOvershot=false;
     Marker destMarker;
     File logfile = null;
     FileOutputStream fos = null;
     String beforeEnable = "";
     Runnable GPSON = null;
     Handler h = new Handler();
+    float firstDistance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -280,6 +281,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
                 if(navigation){
                     if(location.distanceTo(destination) <= 20) {
+                        //We reached the destination radius - no need to test if we overshot the coordinate
+                        testOvershot = false;
                         //We have reached our destination set a new destination
                         if(setDestination()) {
                             //Calculate time to the new destination
@@ -296,6 +299,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             calcGPSTurnOff(time);
                         }
                     }
+                    //We are not withing the target destination - see if we need to test for overshooting
+                    else if(testOvershot){
+                        //Acquire the first distance to destination and use that to determine if we overshot our destination
+                        if(firstOvershot) {
+                            firstDistance = location.distanceTo(destination);
+                            firstOvershot = false;
+                        }
+                        //We have a first distance and the location changed again - measure
+                        else{
+                            //Get the current distance
+                            float curDistance = location.distanceTo(destination);
+                            //Since the users' location fluctuates ever so slightly even when they're standing still - we have to account for that, can't blindly compare if one is greater than the other
+                            //If the distance changed more than 3 meters - a significant change
+                            if(curDistance - firstDistance > 5f){
+                                testOvershot = false;
+                            }
+                            //If we're gaining distance by more than a meter
+                            else if(curDistance - firstDistance < -5f){
+                                //Just end the testing here - we're still moving closer to the destination so we did not overshoot
+                                testOvershot = false;
+                            }
+                            //If neither of those occured - do nothing - keep measuring the distance
+
+
+                        }
+
+                    }
                 }
                 //Check if we just turned the GPS On and need to log the first posible set of coordinates
                 if(logGPSOnLatLng){
@@ -308,6 +338,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         logGPSOnLatLng = true;
                     }
                 }
+
 
 
             }
@@ -425,6 +456,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             velocitydisplay.setText(e.getMessage());
         }
         logGPSOnLatLng = true;
+        testOvershot = true;
+        firstOvershot = true;
     }
 
 
@@ -512,5 +545,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         //We set the GPS to on, get the first coordinates that we can
         logGPSOnLatLng = true;
+        testOvershot = true;
+        firstOvershot = true;
     }
 }
