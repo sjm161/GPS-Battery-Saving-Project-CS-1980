@@ -287,6 +287,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                             try{
                                 Date now = new Date();
+
                                 String logstring = "LOCOFF|" + location.getLatitude() + "|" + location.getLongitude() + "|" + now.toString()  +"\n";
                                 fos.write(logstring.getBytes());
                             }catch(Exception e){
@@ -423,6 +424,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }catch(Exception e){
             velocitydisplay.setText(e.getMessage());
         }
+        logGPSOnLatLng = true;
     }
 
 
