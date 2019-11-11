@@ -289,13 +289,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                 }
                 if(navigation){
-                    if(location.distanceTo(destination) <= 20) {
+                    float radius = 20;
+                    if(location.distanceTo(destination) <= radius) {
                         //We reached the destination radius - no need to test if we overshot the coordinate
                         testOvershot = false;
                         //We have reached our destination set a new destination
                         if(setDestination()) {
                             //Calculate time to the new destination
-                            float time = calcDistance(location, destination) / location.getSpeed();
+                            float time;
+                            do {
+                                time = (calcDistance(location, destination) - radius) / location.getSpeed();
+                            }while(!location.hasSpeed());
 
                             try{
                                 Date now = new Date();
@@ -382,7 +386,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             try{
                 //Log that the user has reached their destination
                 Date now = new Date();
-                String logstring = "NAVSTOP|FINALDEST|" + now.toString();
+                String logstring = "NAVSTOP|FINALDEST|" + now.toString() +"\n";
 
                 fos.write(logstring.getBytes());
                 fos.write("-------------------------------------------------------\n".getBytes());
