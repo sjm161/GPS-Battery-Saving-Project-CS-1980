@@ -192,7 +192,111 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             staticRoute.add(three);
             staticRoute.add(four);
         } else if(user.equals("mosse")) {
+            Location one = new Location("");
+            one.setLatitude(40.473427);
+            one.setLongitude(-79.911090);
 
+            Location two = new Location("");
+            two.setLatitude(40.470195);
+            two.setLongitude(-79.911648);
+
+            Location three = new Location("");
+            three.setLatitude(40.469281);
+            three.setLongitude(-79.912592);
+
+            Location four = new Location("");
+            four.setLatitude(40.468563);
+            four.setLongitude(-79.916626);
+
+            Location five = new Location("");
+            five.setLatitude(40.468800);
+            five.setLongitude(-79.917835);
+
+            Location six = new Location("");
+            six.setLatitude(40.460807);
+            six.setLongitude(-79.922612);
+
+            Location seven = new Location("");
+            seven.setLatitude(40.460575);
+            seven.setLongitude(-79.923014);
+
+            Location eight = new Location("");
+            eight.setLatitude(40.459226);
+            eight.setLongitude(-79.922089);
+
+            Location nine = new Location("");
+            nine.setLatitude(40.459039);
+            nine.setLongitude(-79.924525);
+
+            Location ten = new Location("");
+            ten.setLatitude(40.458368);
+            ten.setLongitude(-79.927332);
+
+            Location eleven = new Location("");
+            eleven.setLatitude(40.456369);
+            eleven.setLongitude(-79.930510);
+
+            Location twelve = new Location("");
+            twelve.setLatitude(40.455084);
+            twelve.setLongitude(-79.931894);
+
+            Location thirteen = new Location("");
+            thirteen.setLatitude(40.452736);
+            thirteen.setLongitude(-79.936728);
+
+            Location fourteen = new Location("");
+            fourteen.setLatitude(40.451297);
+            fourteen.setLongitude(-79.940955);
+
+            Location fifteen = new Location("");
+            fifteen.setLatitude(40.450489);
+            fifteen.setLongitude(-79.945032);
+
+            Location sixteen = new Location("");
+            sixteen.setLatitude(40.447974);
+            sixteen.setLongitude(-79.947687);
+
+            Location seventeen = new Location("");
+            seventeen.setLatitude(40.447345);
+            seventeen.setLongitude(-79.947440);
+
+            Location eighteen = new Location("");
+            eighteen.setLatitude(40.447067);
+            eighteen.setLongitude(-79.947634);
+
+            Location nineteen = new Location("");
+            nineteen.setLatitude(40.446716);
+            nineteen.setLongitude(-79.951474);
+
+            Location twenty = new Location("");
+            twenty.setLatitude(40.442517);
+            twenty.setLongitude(-79.957461);
+
+            Location twentyone = new Location("");
+            twentyone.setLatitude(40.441831);
+            twentyone.setLongitude(-79.956195);
+
+            staticRoute.add(one);
+            staticRoute.add(two);
+            staticRoute.add(three);
+            staticRoute.add(four);
+            staticRoute.add(five);
+            staticRoute.add(six);
+            staticRoute.add(seven);
+            staticRoute.add(eight);
+            staticRoute.add(nine);
+            staticRoute.add(ten);
+            staticRoute.add(eleven);
+            staticRoute.add(twelve);
+            staticRoute.add(thirteen);
+            staticRoute.add(fourteen);
+            staticRoute.add(fifteen);
+            staticRoute.add(sixteen);
+            staticRoute.add(seventeen);
+            staticRoute.add(eighteen);
+            staticRoute.add(nineteen);
+            staticRoute.add(twenty);
+            staticRoute.add(twentyone);
         } else if(user.equals("driver")) {
 
         } else if(user.equals("stephen")) {
@@ -226,7 +330,161 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             staticRoute.add(three);
             staticRoute.add(four);
         } else if(user.equals("mosse")) {
+            Location one = new Location("");
+            one.setLatitude(40.473427);
+            one.setLongitude(-79.911090);
 
+            Location two = new Location("");
+            two.setLatitude(40.470195);
+            two.setLongitude(-79.911648);
+
+            Location three = new Location("");
+            three.setLatitude(40.469281);
+            three.setLongitude(-79.912592);
+
+            Location four = new Location("");
+            four.setLatitude(40.468563);
+            four.setLongitude(-79.916626);
+
+            Location five = new Location("");
+            five.setLatitude(40.468800);
+            five.setLongitude(-79.917835);
+
+            Location six = new Location("");
+            six.setLatitude(40.460807);
+            six.setLongitude(-79.922612);
+
+            Location seven = new Location("");
+            seven.setLatitude(40.460575);
+            seven.setLongitude(-79.923014);
+
+            Location eight = new Location("");
+            eight.setLatitude(40.459226);
+            eight.setLongitude(-79.922089);
+
+            Location nine = new Location("");
+            nine.setLatitude(40.459039);
+            nine.setLongitude(-79.924525);
+
+            Location ten = new Location("");
+            ten.setLatitude(40.458368);
+            ten.setLongitude(-79.927332);
+
+            Location eleven = new Location("");
+            eleven.setLatitude(40.456369);
+            eleven.setLongitude(-79.930510);
+
+            Location twelve = new Location("");
+            twelve.setLatitude(40.455084);
+            twelve.setLongitude(-79.931894);
+
+            Location thirteen = new Location("");
+            thirteen.setLatitude(40.452736);
+            thirteen.setLongitude(-79.936728);
+
+            Location fourteen = new Location("");
+            fourteen.setLatitude(40.451297);
+            fourteen.setLongitude(-79.940955);
+
+            Location fifteen = new Location("");
+            fifteen.setLatitude(40.450489);
+            fifteen.setLongitude(-79.945032);
+
+            Location sixteen = new Location("");
+            sixteen.setLatitude(40.447974);
+            sixteen.setLongitude(-79.947687);
+
+            Location seventeen = new Location("");
+            seventeen.setLatitude(40.447345);
+            seventeen.setLongitude(-79.947440);
+
+            Location eighteen = new Location("");
+            eighteen.setLatitude(40.447067);
+            eighteen.setLongitude(-79.947634);
+
+            Location nineteen = new Location("");
+            nineteen.setLatitude(40.446716);
+            nineteen.setLongitude(-79.951474);
+
+            Location twenty = new Location("");
+            twenty.setLatitude(40.442517);
+            twenty.setLongitude(-79.957461);
+
+            Location twentyone = new Location("");
+            twentyone.setLatitude(40.441831);
+            twentyone.setLongitude(-79.956195);
+
+            Location twentytwo = new Location("");
+            twelve.setLatitude(40.455084);
+            twelve.setLongitude(-79.931894);
+
+            Location twentythree = new Location("");
+            thirteen.setLatitude(40.452736);
+            thirteen.setLongitude(-79.936728);
+
+            Location twentyfour = new Location("");
+            fourteen.setLatitude(40.451297);
+            fourteen.setLongitude(-79.940955);
+
+            Location twentyfive = new Location("");
+            fifteen.setLatitude(40.450489);
+            fifteen.setLongitude(-79.945032);
+
+            Location twentysix = new Location("");
+            sixteen.setLatitude(40.447974);
+            sixteen.setLongitude(-79.947687);
+
+            Location twentyseven = new Location("");
+            seventeen.setLatitude(40.447345);
+            seventeen.setLongitude(-79.947440);
+
+            Location twentyeight = new Location("");
+            eighteen.setLatitude(40.447067);
+            eighteen.setLongitude(-79.947634);
+
+            Location twentynine = new Location("");
+            nineteen.setLatitude(40.446716);
+            nineteen.setLongitude(-79.951474);
+
+            Location thirty = new Location("");
+            twenty.setLatitude(40.442517);
+            twenty.setLongitude(-79.957461);
+
+            Location thirtyone = new Location("");
+            twentyone.setLatitude(40.441831);
+            twentyone.setLongitude(-79.956195);
+
+            staticRoute.add(one);
+            staticRoute.add(two);
+            staticRoute.add(three);
+            staticRoute.add(four);
+            staticRoute.add(five);
+            staticRoute.add(six);
+            staticRoute.add(seven);
+            staticRoute.add(eight);
+            staticRoute.add(nine);
+            staticRoute.add(ten);
+            staticRoute.add(eleven);
+            staticRoute.add(twelve);
+            staticRoute.add(thirteen);
+            staticRoute.add(fourteen);
+            staticRoute.add(fifteen);
+            staticRoute.add(sixteen);
+            staticRoute.add(seventeen);
+            staticRoute.add(eighteen);
+            staticRoute.add(nineteen);
+            staticRoute.add(twenty);
+            staticRoute.add(twentyone);
+            staticRoute.add(twentytwo);
+            staticRoute.add(twentythree);
+            staticRoute.add(twentyfour);
+            staticRoute.add(twentyfive);
+            staticRoute.add(twentysix);
+            staticRoute.add(twentyseven);
+            staticRoute.add(twentyeight);
+            staticRoute.add(twentynine);
+            staticRoute.add(thirty);
+            staticRoute.add(thirtyone);
         } else if(user.equals("driver")) {
 
         } else if(user.equals("stephen")) {
