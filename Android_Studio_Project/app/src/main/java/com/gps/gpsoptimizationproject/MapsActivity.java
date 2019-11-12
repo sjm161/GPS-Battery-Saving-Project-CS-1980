@@ -37,6 +37,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     //This is the amount of time the GPS needs to be off before we save power
     final float POWERSAVINGSTIME = 10f;
 
+    //specifies who the route is going to be created for (Stephen, Matt, Mosse, driver)
+    final String user = "test";
+
     //Declaring objects for use
     Location currentLocation;
     private GoogleMap mMap;
@@ -165,51 +168,71 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     //creates route to Pitt
-    private void createPittRoute(){
-        Location one = new Location("");
-        one.setLatitude(40.443162);
-        one.setLongitude(-79.953543);
+    private void createPittRoute() {
+        if(user.equals("test")) {
+            Location one = new Location("");
+            one.setLatitude(40.443162);
+            one.setLongitude(-79.953543);
 
-        Location two = new Location("");
-        two.setLatitude(40.443918);
-        two.setLongitude(-79.950732);
+            Location two = new Location("");
+            two.setLatitude(40.443918);
+            two.setLongitude(-79.950732);
 
-        Location three = new Location("");
-        three.setLatitude(40.445065);
-        three.setLongitude(-79.951263);
+            Location three = new Location("");
+            three.setLatitude(40.445065);
+            three.setLongitude(-79.951263);
 
-        Location four = new Location("");
-        four.setLatitude(40.445179);
-        four.setLongitude(-79.950357);
+            Location four = new Location("");
+            four.setLatitude(40.445179);
+            four.setLongitude(-79.950357);
 
-        staticRoute.add(one);
-        staticRoute.add(two);
-        staticRoute.add(three);
-        staticRoute.add(four);
+            staticRoute.add(one);
+            staticRoute.add(two);
+            staticRoute.add(three);
+            staticRoute.add(four);
+        } else if(user.equals("mosse")) {
+
+        } else if(user.equals("driver")) {
+
+        } else if(user.equals("stephen")) {
+
+        } else if(user.equals("matt")) {
+
+        }
     }
 
     //creates route to home
-    private void createHomeRoute(){
-        Location one = new Location("");
-        one.setLatitude(40.445179);
-        one.setLongitude(-79.950357);
+    private void createHomeRoute() {
+        if(user.equals("test")) {
+            Location one = new Location("");
+            one.setLatitude(40.445179);
+            one.setLongitude(-79.950357);
 
-        Location two = new Location("");
-        two.setLatitude(40.445065);
-        two.setLongitude(-79.951263);
+            Location two = new Location("");
+            two.setLatitude(40.445065);
+            two.setLongitude(-79.951263);
 
-        Location three = new Location("");
-        three.setLatitude(40.443918);
-        three.setLongitude(-79.950732);
+            Location three = new Location("");
+            three.setLatitude(40.443918);
+            three.setLongitude(-79.950732);
 
-        Location four = new Location("");
-        four.setLatitude(40.443162);
-        four.setLongitude(-79.953543);
+            Location four = new Location("");
+            four.setLatitude(40.443162);
+            four.setLongitude(-79.953543);
 
-        staticRoute.add(one);
-        staticRoute.add(two);
-        staticRoute.add(three);
-        staticRoute.add(four);
+            staticRoute.add(one);
+            staticRoute.add(two);
+            staticRoute.add(three);
+            staticRoute.add(four);
+        } else if(user.equals("mosse")) {
+
+        } else if(user.equals("driver")) {
+
+        } else if(user.equals("stephen")) {
+
+        } else if(user.equals("matt")) {
+
+        } 
     }
 
     private void navigation(){
