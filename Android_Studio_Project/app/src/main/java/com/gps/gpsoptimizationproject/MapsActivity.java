@@ -38,7 +38,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     final float POWERSAVINGSTIME = 10f;
 
     //specifies who the route is going to be created for (Stephen, Matt, Mosse, driver)
-    final String user = "test";
+    final String user = "mosse";
 
     //Declaring objects for use
     Location currentLocation;
@@ -383,140 +383,140 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             twentyone.setLongitude(-79.926633);
 
             Location twentytwo = new Location("");
-            twelve.setLatitude(40.495416);
-            twelve.setLongitude(-79.929581);
+            twentytwo.setLatitude(40.496299);
+            twentytwo.setLongitude(-79.926580);
 
             Location twentythree = new Location("");
-            thirteen.setLatitude(40.494343);
-            thirteen.setLongitude(-79.929510);
+            twentythree.setLatitude(40.496402);
+            twentythree.setLongitude(-79.925995);
 
             Location twentyfour = new Location("");
-            fourteen.setLatitude(40.494755);
-            fourteen.setLongitude(-79.924244);
+            twentyfour.setLatitude(40.496427);
+            twentyfour.setLongitude(-79.925399);
 
             Location twentyfive = new Location("");
-            fifteen.setLatitude(40.494586);
-            fifteen.setLongitude(-79.921678);
+            twentyfive.setLatitude(40.494646);
+            twentyfive.setLongitude(-79.925290);
 
             Location twentysix = new Location("");
-            sixteen.setLatitude(40.493283);
-            sixteen.setLongitude(-79.913704);
+            twentysix.setLatitude(40.494748);
+            twentysix.setLongitude(-79.923533);
 
             Location twentyseven = new Location("");
-            seventeen.setLatitude(40.493134);
-            seventeen.setLongitude( -79.911484);
+            twentyseven.setLatitude(40.493134);
+            twentyseven.setLongitude( -79.911484);
 
             Location twentyeight = new Location("");
-            eighteen.setLatitude(40.492776);
-            eighteen.setLongitude(-79.910667);
+            twentyeight.setLatitude(40.492776);
+            twentyeight.setLongitude(-79.910667);
 
             Location twentynine = new Location("");
-            nineteen.setLatitude(40.492384);
-            nineteen.setLongitude(-79.910490);
+            twentynine.setLatitude(40.492384);
+            twentynine.setLongitude(-79.910490);
 
             Location thirty = new Location("");
-            twenty.setLatitude(40.486523);
-            twenty.setLongitude(-79.913340);
+            thirty.setLatitude(40.486523);
+            thirty.setLongitude(-79.913340);
 
             Location thirtyone = new Location("");
-            twentyone.setLatitude(40.486087);
-            twentyone.setLongitude(-79.913620);
+            thirtyone.setLatitude(40.486087);
+            thirtyone.setLongitude(-79.913620);
 
             Location thirtytwo = new Location("");
-            one.setLatitude(40.486271);
-            one.setLongitude(-79.914975);
+            thirtytwo.setLatitude(40.486271);
+            thirtytwo.setLongitude(-79.914975);
 
             Location thirtythree = new Location("");
-            two.setLatitude(40.486503);
-            two.setLongitude(-79.915159);
+            thirtythree.setLatitude(40.486503);
+            thirtythree.setLongitude(-79.915159);
 
             Location thirtyfour = new Location("");
-            three.setLatitude(40.486570);
-            three.setLongitude(-79.914765);
+            thirtyfour.setLatitude(40.486570);
+            thirtyfour.setLongitude(-79.914765);
 
             Location thirtyfive = new Location("");
-            four.setLatitude(40.485221);
-            four.setLongitude(-79.909418);
+            thirtyfive.setLatitude(40.485221);
+            thirtyfive.setLongitude(-79.909418);
 
             Location thirtysix = new Location("");
-            five.setLatitude(40.484810);
-            five.setLongitude(-79.908489);
+            thirtysix.setLatitude(40.484810);
+            thirtysix.setLongitude(-79.908489);
 
             Location thirtyseven = new Location("");
-            six.setLatitude(40.484438);
-            six.setLongitude(-79.908190);
+            thirtyseven.setLatitude(40.484438);
+            thirtyseven.setLongitude(-79.908190);
 
             Location thirtyeight = new Location("");
-            seven.setLatitude(40.483698);
-            seven.setLongitude(-79.907904);
+            thirtyeight.setLatitude(40.483698);
+            thirtyeight.setLongitude(-79.907904);
 
             Location thirtynine = new Location("");
-            eight.setLatitude(40.482504);
-            eight.setLongitude(-79.908044);
+            thirtynine.setLatitude(40.482504);
+            thirtynine.setLongitude(-79.908044);
 
             Location forty = new Location("");
-            nine.setLatitude(40.480646);
-            nine.setLongitude(-79.907841);
+            forty.setLatitude(40.480646);
+            forty.setLongitude(-79.907841);
 
             Location fortyone = new Location("");
-            ten.setLatitude(40.479302);
-            ten.setLongitude(-79.907847);
+            fortyone.setLatitude(40.479302);
+            fortyone.setLongitude(-79.907847);
 
             Location fortytwo = new Location("");
-            eleven.setLatitude(40.471237);
-            eleven.setLongitude(-79.908559);
+            fortytwo.setLatitude(40.471237);
+            fortytwo.setLongitude(-79.908559);
 
             Location fortythree = new Location("");
-            twelve.setLatitude(40.467464);
-            twelve.setLongitude(-79.908775);
+            fortythree.setLatitude(40.467464);
+            fortythree.setLongitude(-79.908775);
 
             Location fortyfour = new Location("");
-            thirteen.setLatitude(40.463211);
-            thirteen.setLongitude(-79.905827);
+            fortyfour.setLatitude(40.463211);
+            fortyfour.setLongitude(-79.905827);
 
             Location fortyfive = new Location("");
-            fourteen.setLatitude(40.462541);
-            fourteen.setLongitude(-79.905589);
+            fortyfive.setLatitude(40.462541);
+            fortyfive.setLongitude(-79.905589);
 
             Location fortysix = new Location("");
-            fifteen.setLatitude(40.461681);
-            fifteen.setLongitude(-79.905798);
+            fortysix.setLatitude(40.461681);
+            fortysix.setLongitude(-79.905798);
 
             Location fortyseven = new Location("");
-            sixteen.setLatitude(40.456749);
-            sixteen.setLongitude(-79.909474);
+            fortyseven.setLatitude(40.456749);
+            fortyseven.setLongitude(-79.909474);
 
             Location fortyeight = new Location("");
-            seventeen.setLatitude(40.454036);
-            seventeen.setLongitude(-79.912367);
+            fortyeight.setLatitude(40.454036);
+            fortyeight.setLongitude(-79.912367);
 
             Location fortynine = new Location("");
-            eighteen.setLatitude(40.452700);
-            eighteen.setLongitude(-79.922037);
+            fortynine.setLatitude(40.452700);
+            fortynine.setLongitude(-79.922037);
 
             Location fifty = new Location("");
-            nineteen.setLatitude(40.450534);
-            nineteen.setLongitude(-79.927498);
+            fifty.setLatitude(40.450534);
+            fifty.setLongitude(-79.927498);
 
             Location fiftyone = new Location("");
-            twenty.setLatitude(40.447884);
-            twenty.setLongitude(-79.935777);
+            fiftyone.setLatitude(40.447884);
+            fiftyone.setLongitude(-79.935777);
 
             Location fiftytwo = new Location("");
-            twentyone.setLatitude(40.447307);
-            twentyone.setLongitude(-79.944174);
+            fiftytwo.setLatitude(40.447307);
+            fiftytwo.setLongitude(-79.944174);
 
             Location fiftythree = new Location("");
-            twelve.setLatitude(40.448675);
-            twelve.setLongitude(-79.944220);
+            fiftythree.setLatitude(40.448675);
+            fiftythree.setLongitude(-79.944220);
 
             Location fiftyfour = new Location("");
-            thirteen.setLatitude(40.451344);
-            thirteen.setLongitude(-79.945430);
+            fiftyfour.setLatitude(40.451344);
+            fiftyfour.setLongitude(-79.945430);
 
             Location fiftyfive = new Location("");
-            fourteen.setLatitude(40.449809);
-            fourteen.setLongitude(-79.950745);
+            fiftyfive.setLatitude(40.449809);
+            fiftyfive.setLongitude(-79.950745);
 
             staticRoute.add(one);
             staticRoute.add(two);
@@ -689,44 +689,44 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             twentyone.setLongitude(-79.922688);
 
             Location twentytwo = new Location("");
-            twelve.setLatitude(40.462902);
-            twelve.setLongitude(-79.921293);
+            twentytwo.setLatitude(40.462902);
+            twentytwo.setLongitude(-79.921293);
 
             Location twentythree = new Location("");
-            thirteen.setLatitude(40.463173);
-            thirteen.setLongitude(-79.921033);
+            twentythree.setLatitude(40.463173);
+            twentythree.setLongitude(-79.921033);
 
             Location twentyfour = new Location("");
-            fourteen.setLatitude(40.464936);
-            fourteen.setLongitude(-79.919976);
+            twentyfour.setLatitude(40.464936);
+            twentyfour.setLongitude(-79.919976);
 
             Location twentyfive = new Location("");
-            fifteen.setLatitude(40.466037);
-            fifteen.setLongitude(-79.919287);
+            twentyfive.setLatitude(40.466037);
+            twentyfive.setLongitude(-79.919287);
 
             Location twentysix = new Location("");
-            sixteen.setLatitude(40.468835);
-            sixteen.setLongitude(-79.917803);
+            twentysix.setLatitude(40.468835);
+            twentysix.setLongitude(-79.917803);
 
             Location twentyseven = new Location("");
-            seventeen.setLatitude(40.468525);
-            seventeen.setLongitude(-79.916628);
+            twentyseven.setLatitude(40.468525);
+            twentyseven.setLongitude(-79.916628);
 
             Location twentyeight = new Location("");
-            eighteen.setLatitude(40.469247);
-            eighteen.setLongitude(-79.912611);
+            twentyeight.setLatitude(40.469247);
+            twentyeight.setLongitude(-79.912611);
 
             Location twentynine = new Location("");
-            nineteen.setLatitude(40.469627);
-            nineteen.setLongitude(-79.911940);
+            twentynine.setLatitude(40.469627);
+            twentynine.setLongitude(-79.911940);
 
             Location thirty = new Location("");
-            twenty.setLatitude(40.470202);
-            twenty.setLongitude(-79.911602);
+            thirty.setLatitude(40.470202);
+            thirty.setLongitude(-79.911602);
 
             Location thirtyone = new Location("");
-            twentyone.setLatitude(40.473442);
-            twentyone.setLongitude(-79.911092);
+            thirtyone.setLatitude(40.473442);
+            thirtyone.setLongitude(-79.911092);
 
             staticRoute.add(one);
             staticRoute.add(two);
@@ -844,7 +844,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                 }
                 if(navigation){
-                    float radius = 20;
+                    float radius = 40;
                     if(location.distanceTo(destination) <= radius) {
                         //We reached the destination radius - no need to test if we overshot the coordinate
                         testOvershot = false;
