@@ -760,7 +760,108 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             staticRoute.add(thirty);
             staticRoute.add(thirtyone);
         } else if(user.equals("driver")) {
+            Location one = new Location("");
+            one.setLatitude(40.450092);
+            one.setLongitude(-79.950885);
 
+            Location two = new Location("");
+            two.setLatitude(40.449805);
+            two.setLongitude(-79.950725);
+
+            Location three = new Location("");
+            three.setLatitude(40.469247);
+            three.setLongitude(-79.912611);
+
+            Location four = new Location("");
+            four.setLatitude(40.451407);
+            four.setLongitude(-79.945441);
+
+            Location five = new Location("");
+            five.setLatitude(40.452175);
+            five.setLongitude(-79.941463);
+
+            Location six = new Location("");
+            six.setLatitude(40.4447717);
+            six.setLongitude(-79.938835);
+
+            Location seven = new Location("");
+            seven.setLatitude(40.447922);
+            seven.setLongitude(-79.935758);
+
+            Location eight = new Location("");
+            eight.setLatitude(40.450545);
+            eight.setLongitude(-79.927512);
+
+            Location nine = new Location("");
+            nine.setLatitude(40.452727);
+            nine.setLongitude(-79.921930);
+
+            Location ten = new Location("");
+            ten.setLatitude(40.454016);
+            ten.setLongitude(-79.912438);
+
+            Location eleven = new Location("");
+            eleven.setLatitude(40.456784);
+            eleven.setLongitude(-79.909434);
+
+            Location twelve = new Location("");
+            twelve.setLatitude(40.461690);
+            twelve.setLongitude(-79.905818);
+
+            Location thirteen = new Location("");
+            thirteen.setLatitude(40.462433);
+            thirteen.setLongitude(-79.905609);
+
+            Location fourteen = new Location("");
+            fourteen.setLatitude(40.463282);
+            fourteen.setLongitude(-79.905840);
+
+            Location fifteen = new Location("");
+            fifteen.setLatitude(40.466922);
+            fifteen.setLongitude(-79.908500);
+
+            Location sixteen = new Location("");
+            sixteen.setLatitude(40.467681);
+            sixteen.setLongitude(-79.908782);
+
+            Location seventeen = new Location("");
+            seventeen.setLatitude(40.479791);
+            seventeen.setLongitude(-79.907803);
+
+            Location eighteen = new Location("");
+            eighteen.setLatitude(40.482198);
+            eighteen.setLongitude(-79.908039);
+
+            Location nineteen = new Location("");
+            nineteen.setLatitude(40.484263);
+            nineteen.setLongitude(-79.907824);
+
+            Location twenty = new Location("");
+            twenty.setLatitude(40.485152);
+            twenty.setLongitude(-79.909219);
+
+            //stop on washington blv entrance curve
+
+            staticRoute.add(one);
+            staticRoute.add(two);
+            staticRoute.add(three);
+            staticRoute.add(four);
+            staticRoute.add(five);
+            staticRoute.add(six);
+            staticRoute.add(seven);
+            staticRoute.add(eight);
+            staticRoute.add(nine);
+            staticRoute.add(ten);
+            staticRoute.add(eleven);
+            staticRoute.add(twelve);
+            staticRoute.add(thirteen);
+            staticRoute.add(fourteen);
+            staticRoute.add(fifteen);
+            staticRoute.add(sixteen);
+            staticRoute.add(seventeen);
+            staticRoute.add(eighteen);
+            staticRoute.add(nineteen);
+            staticRoute.add(twenty);
         } else if(user.equals("stephen")) {
 
         } else if(user.equals("matt")) {
