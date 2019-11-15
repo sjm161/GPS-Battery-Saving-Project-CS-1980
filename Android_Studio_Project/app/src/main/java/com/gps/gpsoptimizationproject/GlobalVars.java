@@ -5,7 +5,8 @@ package com.gps.gpsoptimizationproject;
 import android.location.Location;
 
 public class GlobalVars {
-    public static Location dest;
+    public static String Transportation = "";
+  /*  public static Location dest;
     public static boolean navigate = false;
     public static float curspeed = 0.0f;
 
@@ -31,7 +32,7 @@ public class GlobalVars {
 
     public void setSpeed(float newspeed){
 
-    }
+    }*/
 
 
 

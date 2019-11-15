@@ -38,7 +38,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     final float POWERSAVINGSTIME = 10f;
 
     //specifies who the route is going to be created for (Stephen, Matt, Mosse, driver)
-    final String user = "mosse";
+    final String user = "matt";
 
     //Declaring objects for use
     Location currentLocation;
@@ -576,6 +576,100 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } else if(user.equals("stephen")) {
 
         } else if(user.equals("matt")) {
+            //Detect if it's the T
+            if(GlobalVars.Transportation == "T"){
+
+            }
+            //Did I set it to be a bus instead?
+            else if(GlobalVars.Transportation == "61"){
+                //Fifth and Sixth Avenue
+                Location one = new Location("");
+                one.setLatitude(40.438941);
+                one.setLongitude(-79.994737);
+                //Sixth and  Forbes
+                Location two = new Location("");
+                two.setLatitude(40.438036);
+                two.setLongitude(-79.994348);
+                //Forbes and Birmingham
+                Location three = new Location("");
+                three.setLatitude(40.437065);
+                three.setLongitude(-79.972453);
+                //Forbes Stops bending
+                Location four = new Location("");
+                four.setLatitude(40.435949);
+                four.setLongitude(-79.964750);
+                //Forbes and David Lawrence Hall
+                Location five = new Location("");
+                five.setLatitude(40.442669);
+                five.setLongitude(-79.955434);
+                //Final destination - Forbes and Bigelow
+                Location six = new Location("");
+                six.setLatitude(40.443157);
+                six.setLongitude(-79.953597);
+                //Add the newly constructed routes
+                staticRoute.add(one);
+                staticRoute.add(two);
+                staticRoute.add(three);
+                staticRoute.add(four);
+                staticRoute.add(five);
+                staticRoute.add(six);
+            }
+            else if(GlobalVars.Transportation == "71"){
+                //Fifth and Sixth Avenue
+                Location one = new Location("");
+                one.setLatitude(40.438941);
+                one.setLongitude(-79.994737);
+                //Sixth and  Forbes
+                Location two = new Location("");
+                two.setLatitude(40.438036);
+                two.setLongitude(-79.994348);
+                //Forbes and Jumonville
+                Location three = new Location("");
+                three.setLatitude(40.437787);
+                three.setLongitude(-79.977697);
+                //Fifth and Jumonville
+                Location four = new Location("");
+                four.setLatitude(40.438228);
+                four.setLongitude(-79.977649);
+                //Fifth and Kirkpatrick
+                Location five = new Location("");
+                five.setLatitude(40.437917);
+                five.setLongitude(-79.973414);
+                //Fifth close to Brenham
+                Location six = new Location("");
+                six.setLatitude(40.436445);
+                six.setLongitude(-79.968761);
+                //Fifth and Blvd of the Allies
+                Location seven = new Location("");
+                seven.setLatitude(40.436576);
+                seven.setLongitude(-79.966310);
+
+                //Fifth Robinson
+                Location eight = new Location("");
+                eight.setLatitude(40.437646);
+                eight.setLongitude(-79.965113);
+
+                //Fifth Dunseith
+                Location nine = new Location("");
+                nine.setLatitude(40.438347);
+                nine.setLongitude(-79.963134);
+
+                //Final - Fifth and Bigelow
+                Location ten = new Location("");
+                ten.setLatitude(40.444408);
+                ten.setLongitude(-79.954845);
+                //Add the newly created route
+                staticRoute.add(one);
+                staticRoute.add(two);
+                staticRoute.add(three);
+                staticRoute.add(four);
+                staticRoute.add(five);
+                staticRoute.add(six);
+                staticRoute.add(seven);
+                staticRoute.add(eight);
+                staticRoute.add(nine);
+                staticRoute.add(ten);
+            }
 
         }
     }
@@ -865,6 +959,52 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } else if(user.equals("stephen")) {
 
         } else if(user.equals("matt")) {
+            if(GlobalVars.Transportation == "T"){
+
+            }
+            else if(GlobalVars.Transportation == "Bus"){
+                //First - Fifth and Atwood
+                Location one = new Location("");
+                one.setLatitude(40.441770);
+                one.setLongitude(-79.958493);
+
+                //Fifth Dunseith
+                Location two = new Location("");
+                two.setLatitude(40.438347);
+                two.setLongitude(-79.963134);
+
+                //Fifth Robinson
+                Location three = new Location("");
+                three.setLatitude(40.437646);
+                three.setLongitude(-79.965113);
+
+                //Fifth and Blvd of the Allies
+                Location four = new Location("");
+                four.setLatitude(40.436576);
+                four.setLongitude(-79.966310);
+
+                //Fifth close to Brenham
+                Location five = new Location("");
+                five.setLatitude(40.436445);
+                five.setLongitude(-79.968761);
+
+                //Fifth and Kirkpatrick
+                Location six = new Location("");
+                six.setLatitude(40.437917);
+                six.setLongitude(-79.973414);
+
+                Location seven = new Location("");
+                seven.setLatitude(40.438936);
+                seven.setLongitude(-79.994712);
+
+                staticRoute.add(one);
+                staticRoute.add(two);
+                staticRoute.add(three);
+                staticRoute.add(four);
+                staticRoute.add(five);
+                staticRoute.add(six);
+                staticRoute.add(seven);
+            }
 
         } 
     }

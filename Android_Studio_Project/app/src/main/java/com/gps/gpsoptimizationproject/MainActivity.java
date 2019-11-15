@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     static TextView MainText;
     static TextView GPSText;
     static boolean route = false;
+    final static boolean Matt = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,10 @@ public class MainActivity extends AppCompatActivity {
         Button gpsButton = findViewById(R.id.GPSToggle);
         Button pitt = findViewById(R.id.pitt);
         Button home = findViewById(R.id.home);
+        //Notes from matt - extra buttons to accomadate the two different bus routes I take
+        Button pitt61 = findViewById(R.id.pitt61);
+        Button pitt71 = findViewById(R.id.pitt71);
+        Button homebus = findViewById(R.id.homebus);
 
         gpsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         pitt.setOnClickListener(new View.OnClickListener() {
             @Override
            public void onClick(View v) {
+                GlobalVars.Transportation = "T";
                 route = false;
                 moveToMapActivity();
            }
@@ -74,10 +80,48 @@ public class MainActivity extends AppCompatActivity {
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                GlobalVars.Transportation = "T";
                 route = true;
                 moveToMapActivity();
             }
         });
+        //Make the three new buttons invisible if The build is not for Matt
+        if(!Matt){
+            pitt61.setVisibility(View.GONE);
+            pitt71.setVisibility(View.GONE);
+            homebus.setVisibility(View.GONE);
+        }
+        else{
+            pitt.setText("To Pitt T");
+            home.setText("To Home T");
+        }
+        //Sets the routes for Matt's trips
+        pitt61.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GlobalVars.Transportation = "61";
+                route = false;
+                moveToMapActivity();
+            }
+        });
+        pitt71.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GlobalVars.Transportation = "71";
+                route = false;
+                moveToMapActivity();
+            }
+        });
+        homebus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GlobalVars.Transportation = "Bus";
+                route = true;
+                moveToMapActivity();
+            }
+        });
+
+
         //Now to add the GPS Status listener
         setUpGpsListener();
     }
