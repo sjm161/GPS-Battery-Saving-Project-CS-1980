@@ -1093,9 +1093,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         if(setDestination()) {
                             //Calculate time to the new destination
                             float time;
-                            do {
-                                time = (calcDistance(location, destination) - radius) / location.getSpeed();
-                            }while(!location.hasSpeed());
+
+                            time = (calcDistance(location, destination) - radius) / location.getSpeed();
+
 
                             try{
                                 Date now = new Date();
@@ -1137,9 +1137,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     //Calculate time to the new destination
 
                                     float time;
-                                    do {
-                                        time = (calcDistance(location, destination) - radius) / location.getSpeed();
-                                    }while(!location.hasSpeed());
+                                    time = (calcDistance(location, destination) - radius) / location.getSpeed();
+
 
                                     try{
                                         Date now = new Date();
