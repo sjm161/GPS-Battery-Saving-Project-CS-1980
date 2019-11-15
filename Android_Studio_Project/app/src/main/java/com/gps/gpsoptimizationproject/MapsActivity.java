@@ -1120,9 +1120,37 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             //Get the current distance
                             float curDistance = location.distanceTo(destination);
                             //Since the users' location fluctuates ever so slightly even when they're standing still - we have to account for that, can't blindly compare if one is greater than the other
-                            //If the distance changed more than 3 meters - a significant change
+                            //If the distance changed more than 5 meters - a significant change
                             if(curDistance - firstDistance > 5f){
                                 testOvershot = false;
+                                //We overshot our destination since we increased distance by meters - acquire the next intersection
+                                if(setDestination()) {
+                                    //Log that we over shot and by how many meters
+                                    try{
+                                        Date now = new Date();
+
+                                        String logstring = "OVERSHOT|" + curDistance + "|" + location.getLatitude() + "|" + location.getLongitude() + "|" + now.toString()  +"\n";
+                                        fos.write(logstring.getBytes());
+                                    }catch(Exception e){
+
+                                    }
+                                    //Calculate time to the new destination
+
+                                    float time;
+                                    do {
+                                        time = (calcDistance(location, destination) - radius) / location.getSpeed();
+                                    }while(!location.hasSpeed());
+
+                                    try{
+                                        Date now = new Date();
+
+                                        String logstring = "LOCOFF|" + location.getLatitude() + "|" + location.getLongitude() + "|" + now.toString()  +"\n";
+                                        fos.write(logstring.getBytes());
+                                    }catch(Exception e){
+
+                                    }
+                                    calcGPSTurnOff(time);
+                                }
                             }
                             //If we're gaining distance by more than a meter
                             else if(curDistance - firstDistance < -5f){
