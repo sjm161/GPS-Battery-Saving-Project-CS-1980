@@ -32,7 +32,7 @@ import java.lang.Thread;
 public class MainActivity extends AppCompatActivity {
     static LocationManager GPSDetector;
     static LocationListener templistener;
-    static boolean recording = false;
+    static boolean recording = false, GPSTurnOn = false;
     static String beforeEnable = "";
     static TextView MainText, GPSText;
     static Button toggleButton;
@@ -199,6 +199,8 @@ public class MainActivity extends AppCompatActivity {
         catch(Exception e){
             MainText.setText(e.getMessage());
         }
+        //We turned the GPS ON,
+        GPSTurnOn = true;
     }
 
 
@@ -308,7 +310,21 @@ public class MainActivity extends AppCompatActivity {
         templistener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
+                //If we turned the GPS ON and are currently looking to verify the times we are getting
+                if(GPSTurnOn){
+                    GPSTurnOn = false;
+                    long curloctime = System.nanoTime();
+                    long loctotaltime = curloctime - starttime;
+                    try{
+                        Date now = new Date();
+                        String output = "FIRSTLOC|"+ curloctime + "|" + loctotaltime + "|" + (int)(loctotaltime *  0.0000010) + "ms|"+now.toString() + "\n";
+                        fos.write(output.getBytes());
+                    }catch(Exception e){
+                        GPSText.setText(e.getMessage());
+                        GPSTurnOn = true;
+                    }
 
+                }
             }
 
             @Override
