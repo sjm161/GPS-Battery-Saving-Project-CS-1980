@@ -578,6 +578,78 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } else if(user.equals("matt")) {
             //Detect if it's the T
             if(GlobalVars.Transportation == "T"){
+                //Mcneilly
+                Location one = new Location("");
+                one.setLatitude(40.378012);
+                one.setLongitude(-80.004230);
+
+                //End of South Busway
+                Location two = new Location("");
+                two.setLatitude(40.382827);
+                two.setLongitude(-79.996851);
+
+                //South Bank
+                Location three = new Location("");
+                three.setLatitude(40.392673);
+                three.setLongitude(-79.998082);
+
+                //Denise
+                Location four = new Location("");
+                four.setLatitude(40.399630);
+                four.setLongitude(-79.999019);
+
+                //Bon Air
+                Location five = new Location("");
+                five.setLatitude(40.407941);
+                five.setLongitude(-80.003105);
+
+                //Boggs
+                Location six = new Location("");
+                six.setLatitude(40.416654);
+                six.setLongitude(-80.010457);
+
+                //Bend Closest to Boggs
+                Location seven = new Location("");
+                seven.setLatitude(40.418571);
+                seven.setLongitude(-80.010873);
+
+                //South Hills Junction
+                Location eight = new Location("");
+                eight.setLatitude(40.421131);
+                eight.setLongitude(-80.006793);
+
+                //Start of Mt. Washington Transit Tunnel
+                Location nine = new Location("");
+                nine.setLatitude(40.432027);
+                nine.setLongitude(-80.004138);
+
+                //Rounding the Bend
+                Location ten = new Location("");
+                ten.setLatitude(40.430870);
+                ten.setLongitude(-80.001577);
+
+                //Start of the River
+                Location eleven = new Location("");
+                eleven.setLatitude(40.431541);
+                eleven.setLongitude(-79.999134);
+
+                //First Avenue
+                Location twelve = new Location("");
+                twelve.setLatitude(40.435384);
+                twelve.setLongitude(-79.996308);
+
+                staticRoute.add(one);
+                staticRoute.add(two);
+                staticRoute.add(three);
+                staticRoute.add(four);
+                staticRoute.add(five);
+                staticRoute.add(six);
+                staticRoute.add(seven);
+                staticRoute.add(eight);
+                staticRoute.add(nine);
+                staticRoute.add(ten);
+                staticRoute.add(eleven);
+                staticRoute.add(twelve);
 
             }
             //Did I set it to be a bus instead?
@@ -960,7 +1032,77 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         } else if(user.equals("matt")) {
             if(GlobalVars.Transportation == "T"){
+                //Crossing the River
+                Location one = new Location("");
+                one.setLatitude(40.431541);
+                one.setLongitude(-79.999134);
 
+                //Rounding the Bend
+                Location two = new Location("");
+                two.setLatitude(40.430870);
+                two.setLongitude(-80.001577);
+
+                //Start of Mt. Washington Transit Tunnel
+                Location three = new Location("");
+                three.setLatitude(40.432027);
+                three.setLongitude(-80.004138);
+
+                //South Hills Junction
+                Location four = new Location("");
+                four.setLatitude(40.421131);
+                four.setLongitude(-80.006793);
+
+                //Bend Closest to Boggs
+                Location five = new Location("");
+                five.setLatitude(40.418571);
+                five.setLongitude(-80.010873);
+
+                //Boggs
+                Location six = new Location("");
+                six.setLatitude(40.416654);
+                six.setLongitude(-80.010457);
+
+                //Bon Air
+                Location seven = new Location("");
+                seven.setLatitude(40.407941);
+                seven.setLongitude(-80.003105);
+                //Denise
+                Location eight = new Location("");
+                eight.setLatitude(40.399630);
+                eight.setLongitude(-79.999019);
+
+                //South Bank
+                Location nine = new Location("");
+                nine.setLatitude(40.392673);
+                nine.setLongitude(-79.998082);
+
+                //End of South Busway
+                Location ten = new Location("");
+                ten.setLatitude(40.382827);
+                ten.setLongitude(-79.996851);
+
+                //Mcneilly
+                Location eleven = new Location("");
+                eleven.setLatitude(40.378012);
+                eleven.setLongitude(-80.004230);
+
+                //Final Destination - Killarney
+                Location twelve = new Location("");
+                twelve.setLatitude(40.373835);
+                twelve.setLongitude(-80.007824);
+
+                staticRoute.add(one);
+                staticRoute.add(two);
+                staticRoute.add(three);
+                staticRoute.add(four);
+                staticRoute.add(five);
+                staticRoute.add(six);
+                staticRoute.add(seven);
+                staticRoute.add(eight);
+                staticRoute.add(nine);
+                staticRoute.add(ten);
+                staticRoute.add(eleven);
+                staticRoute.add(twelve);
             }
             else if(GlobalVars.Transportation == "Bus"){
                 //First - Fifth and Atwood
