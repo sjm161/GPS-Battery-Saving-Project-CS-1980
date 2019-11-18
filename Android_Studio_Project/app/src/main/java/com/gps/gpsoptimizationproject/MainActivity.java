@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         Button gpsButton = findViewById(R.id.GPSToggle);
         Button pitt = findViewById(R.id.pitt);
         Button home = findViewById(R.id.home);
-        //Notes from matt - extra buttons to accomadate the two different bus routes I take
+        //Notes from matt - extra buttons to accommadate the two different bus routes I take
         Button pitt61 = findViewById(R.id.pitt61);
         Button pitt71 = findViewById(R.id.pitt71);
         Button homebus = findViewById(R.id.homebus);
@@ -204,9 +204,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         try {
-            Settings.Secure.putString (context.getContentResolver(),
-                    Settings.Secure.LOCATION_PROVIDERS_ALLOWED,
-                    beforeEnable);
+            Settings.Secure.putString (context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED, beforeEnable);
         } catch(Exception e) {
             //Let's add in some error checking - lets set one of the text views to an error message
             //for exception handling
@@ -258,6 +256,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setnewLocationListener() {
        templistener = new LocationListener() {
+
             @Override
             public void onLocationChanged(Location location) {
 
