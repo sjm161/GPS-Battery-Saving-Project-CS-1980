@@ -27,7 +27,8 @@ public class MainActivity extends AppCompatActivity {
     static TextView MainText;
     static TextView GPSText;
     static boolean route = false;
-    final static boolean Matt = true;
+    // provides buttons for Matt route select
+    final static boolean Matt = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         Button gpsButton = findViewById(R.id.GPSToggle);
         Button pitt = findViewById(R.id.pitt);
         Button home = findViewById(R.id.home);
-        //Notes from matt - extra buttons to accommadate the two different bus routes I take
+        //Notes from matt - extra buttons to accommodate the two different bus routes I take
         Button pitt61 = findViewById(R.id.pitt61);
         Button pitt71 = findViewById(R.id.pitt71);
         Button homebus = findViewById(R.id.homebus);
@@ -85,13 +86,12 @@ public class MainActivity extends AppCompatActivity {
                 moveToMapActivity();
             }
         });
-        //Make the three new buttons invisible if The build is not for Matt
-        if(!Matt){
+        //Make the three new buttons invisible if the build is not for Matt
+        if(!Matt) {
             pitt61.setVisibility(View.GONE);
             pitt71.setVisibility(View.GONE);
             homebus.setVisibility(View.GONE);
-        }
-        else{
+        } else {
             pitt.setText("To Pitt T");
             home.setText("To Home T");
         }
@@ -121,9 +121,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         //Now to add the GPS Status listener
-        setUpGpsListener();
+        setUpGPSListener();
     }
 
     @Override
@@ -153,25 +152,6 @@ public class MainActivity extends AppCompatActivity {
     current version of android*/
 
     private void turnGPSOn (Context context) {
-        //startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-        //Notes from Matt
-        //This code here seems to not use caching as it can take a while to reacquire the GPS signal....
-        /*beforeEnable = Settings.Secure.getString (context.getContentResolver(),
-                Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
-        String newSet = String.format ("%s,%s",
-                beforeEnable,
-                LocationManager.GPS_PROVIDER);
-        try {
-            Settings.Secure.putString (context.getContentResolver(),
-                    Settings.Secure.LOCATION_PROVIDERS_ALLOWED,
-                    newSet);
-        } catch(Exception e) {
-            //Let's add in some error checking - lets set one of the text views to an error message
-            //for exception handling
-            MainText.setText(e.getMessage());
-        }*/
-        //boolean gpsStatus = locmanager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        //This modified line seems to acquire the GPS signal quickly
         try {
             Settings.Secure.putString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED, "network,gps");
         } catch (Exception e) {
@@ -180,7 +160,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void turnGPSOff (Context context) {
-        //LocationServices.SettingsApi
         if (null == beforeEnable) {
             String str = Settings.Secure.getString (context.getContentResolver(),
                     Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
@@ -213,10 +192,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //code to detect when the satellite is connected
-    private void setUpGpsListener() {
+    private void setUpGPSListener() {
         //First initialize the GPS Locator
         GPSDetector = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        setnewLocationListener();
+        setNewLocationListener();
         try {
             //Now add a GPS Status listener
             GPSDetector.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, -1, templistener);
@@ -254,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void setnewLocationListener() {
+    private void setNewLocationListener() {
        templistener = new LocationListener() {
 
             @Override

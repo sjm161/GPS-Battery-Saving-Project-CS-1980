@@ -48,8 +48,6 @@
     <!--     The permissions that supposedly allow you to enable and disable GPS location -->
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" />
-    <!-- Allows us to access the BatteryManager -->
-    <uses-sdk android:minSdkVersion="21"/>
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />

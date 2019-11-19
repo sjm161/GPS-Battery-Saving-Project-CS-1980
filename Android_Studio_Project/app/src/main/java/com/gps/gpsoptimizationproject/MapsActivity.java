@@ -38,7 +38,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     final float POWERSAVINGSTIME = 10f;
 
     //specifies who the route is going to be created for (Stephen, Matt, Mosse, driver, test)
-    final String user = "matt";
+    final String user = "mosse";
 
     //Declaring objects for use
     Location currentLocation;
@@ -46,7 +46,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     LocationManager LocM;
     LocationListener newlistener;
     TextView velocitydisplay, distancedisplay, timedisplay;
+    // current point in list
     Location destination;
+    // used to calculate distance from GPS turning on to previous point
+    Location previous;
+    // used to set if we are only logging or modulating
+    boolean logging = true;
     ArrayList<Location> staticRoute;
     int ListI = 0;
     boolean navigation = false, logGPSOnLatLng = false, testOvershot = false, firstOvershot=false;
@@ -57,8 +62,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Runnable GPSON = null;
     Handler h = new Handler();
     float firstDistance;
-    BatteryManager bm = (BatteryManager)getSystemService(BATTERY_SERVICE);
-    int batLevel = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+    // object used to get battery level
+    BatteryManager bm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,8 +79,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             logfile = new File(getApplicationContext().getFilesDir() + "/GPSLog.txt");
             fos = new FileOutputStream(logfile, true);
             Date now = new Date();
-            String logstring = "APPSTART|"+now.toString() + "\n";
-            fos.write(logstring.getBytes());
+            int batLevel = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+            String logString = "APPSTART | " + now.toString() + " | " + batLevel + "\n";
+            fos.write(logString.getBytes());
         } catch(FileNotFoundException e) {
             try {
                 logfile.createNewFile();
@@ -86,6 +92,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } catch(Exception ef) {
 
         }
+
+        // instantiate BatteryManagery object
+        bm = (BatteryManager)getSystemService(BATTERY_SERVICE);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -113,9 +122,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 try{
                     //Log when the user starts the navigational app
                     Date now = new Date();
-                    String logstring = "NAVSTART|" + now.toString() + "\n";
+                    int batLevel = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+                    String logString = "NAV_START | " + batLevel + " | " + now.toString() + "\n";
                     fos.write("-------------------------------------------------------\n".getBytes());
-                    fos.write(logstring.getBytes());
+                    fos.write(logString.getBytes());
                 } catch(Exception e) {
                     velocitydisplay.setText(e.getMessage());
                 }
@@ -138,8 +148,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 try {
                     //Log that the user stopped navigation manually
                     Date now = new Date();
-                    String logstring = "NAVSTOP|MANUAL|" + now.toString() + "\n";
-                    fos.write(logstring.getBytes());
+                    int batLevel = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+                    String logString = "NAV_STOP (MANUAL) | " + batLevel + " | " + now.toString() + "\n";
+                    fos.write(logString.getBytes());
                     fos.write("-------------------------------------------------------\n".getBytes());
                 } catch(Exception e) {
                         velocitydisplay.setText(e.getMessage());
@@ -149,7 +160,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
         setNewLocationListener();
         //Declare a location Manager
-        LocM = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        LocM = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         try {
             //LocM.requestSingleUpdate(LocationManager.GPS_PROVIDER, null);
             LocM.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, newlistener);
@@ -160,8 +171,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         GPSON = new Runnable() {
             @Override
             public void run() {
-                //turnGpsOn(getApplicationContext());
-                logGPSOn();
+                if(logging == false) {
+                    turnGPSOn(getApplicationContext());
+                } else {
+                    logGPSOn();
+                }
             }
         };
     }
@@ -1154,22 +1168,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    private void calcDistance(Location dest) {
-        try {
-            Location cur = LocM.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if(cur == null) {
-                distancedisplay.setText("Cur is null");
-            } else {
-                float distance = cur.distanceTo(dest);
-                distancedisplay.setText(String.valueOf(distance) + " || " + cur.getLatitude() + " || " + cur.getLongitude());
-            }
-        } catch(SecurityException se) {
-            velocitydisplay.setText(se.getMessage());
-        } catch (Exception e) {
-            velocitydisplay.setText(e.getMessage());
-        }
-    }
-
     private float calcDistance(Location cur, Location dest) {
         try {
             if(cur == null) {
@@ -1187,8 +1185,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return 0f;
     }
 
-    //This function creates a location listener - which handles detecting location changes- we don't
-    //have a need for the other functions - as they are not as efficient as we want them to be and don't do what we need them to do
+    //This function creates a location listener which handles detecting location changes - we don't
+    //have a need for the other functions as they are not as efficient as we want them to be and don't do what we need them to do
     private void setNewLocationListener() {
         newlistener = new LocationListener() {
             @Override
@@ -1200,11 +1198,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     if(navigation) {
                         float time = calcDistance(location, destination) / location.getSpeed();
                         timedisplay.setText(String.valueOf(time) + " s");
-                        try{
+                        try {
                             Date now = new Date();
-                            String logstring = "CURLOC|" + location.getLatitude() + "|" + location.getLongitude() + "|" + location.getSpeed() +"m/s|" + location.distanceTo(destination) + "m|" + now.toString()  +"\n";
-                            fos.write(logstring.getBytes());
-                        }catch(Exception e){
+                            int batLevel = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+                            String logString = "CUR_LOC | " + location.getLatitude() + " | " + location.getLongitude() + " | " + location.getSpeed() +"m/s | " + location.distanceTo(destination) + "m | " + batLevel + " | " + now.toString()  +"\n";
+                            fos.write(logString.getBytes());
+                        } catch(Exception e) {
                             logGPSOnLatLng = true;
                         }
                     }
@@ -1221,13 +1220,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             time = (calcDistance(location, destination) - radius) / location.getSpeed();
                             try {
                                 Date now = new Date();
-
-                                String logstring = "LOCOFF|" + location.getLatitude() + "|" + location.getLongitude() + "|" + now.toString()  +"\n";
-                                fos.write(logstring.getBytes());
+                                int batLevel = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+                                String logString = "LOCOFF|" + location.getLatitude() + "|" + location.getLongitude() + "|" + batLevel + " | " + now.toString()  +"\n";
+                                fos.write(logString.getBytes());
                             } catch(Exception e) {
 
                             }
-                            calcGPSTurnOff(time);
+                            calcGPSTurnOff(time, location);
                         }
                     }
                     //We are not within the target destination - see if we need to test for overshooting
@@ -1250,10 +1249,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     //Log that we over shot and by how many meters
                                     try{
                                         Date now = new Date();
-
-                                        String logstring = "OVERSHOT|" + curDistance + "|" + location.getLatitude() + "|" + location.getLongitude() + "|" + now.toString()  +"\n";
-                                        fos.write(logstring.getBytes());
-                                    }catch(Exception e){
+                                        int batLevel = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+                                        String logString = "OVERSHOT|" + curDistance + "|" + location.getLatitude() + "|" + location.getLongitude() + "|" + batLevel + " | " + now.toString()  +"\n";
+                                        fos.write(logString.getBytes());
+                                    } catch(Exception e) {
 
                                     }
                                     //Calculate time to the new destination
@@ -1261,12 +1260,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     time = (calcDistance(location, destination) - radius) / location.getSpeed();
                                     try {
                                         Date now = new Date();
-                                        String logstring = "LOCOFF|" + location.getLatitude() + "|" + location.getLongitude() + "|" + now.toString()  +"\n";
-                                        fos.write(logstring.getBytes());
+                                        String logString = "LOC_OFF|" + location.getLatitude() + "|" + location.getLongitude() + "|" + now.toString()  +"\n";
+                                        fos.write(logString.getBytes());
                                     }catch(Exception e){
 
                                     }
-                                    calcGPSTurnOff(time);
+                                    calcGPSTurnOff(time, location);
                                 }
                             }
                             //If we're gaining distance by more than a meter
@@ -1274,7 +1273,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 //Just end the testing here - we're still moving closer to the destination so we did not overshoot
                                 testOvershot = false;
                             }
-                            //If neither of those occured - do nothing - keep measuring the distance
+                            //If neither of those occurred - do nothing - keep measuring the distance
                         }
                     }
                 }
@@ -1283,8 +1282,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     logGPSOnLatLng = false;
                     try {
                         Date now = new Date();
-                        String logstring = "LOCON|" + location.getLatitude() + "|" + location.getLongitude() + "|" + now.toString()  + "\n";
-                        fos.write(logstring.getBytes());
+                        int batLevel = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+                        String logString = "LOC_ON | " + location.getLatitude() + " | " + location.getLongitude() + " | " + batLevel + " | " + now.toString()  + "\n";
+                        fos.write(logString.getBytes());
                     } catch(Exception e) {
                         logGPSOnLatLng = true;
                     }
@@ -1319,21 +1319,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             //Set the two text boxes relevant only to a destination to off
             distancedisplay.setText("");
             timedisplay.setText("");
-            try{
+            try {
                 //Log that the user has reached their destination
                 Date now = new Date();
-                String logstring = "NAV_STOP (FINAL_DEST) | " + now.toString() +"\n";
-
-                fos.write(logstring.getBytes());
+                int batLevel = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+                String logString = "NAV_STOP (FINAL_DEST) | " + batLevel + " | " + now.toString() +"\n";
+                fos.write(logString.getBytes());
                 fos.write("-------------------------------------------------------\n".getBytes());
-            }catch(Exception e){
+            } catch(Exception e) {
                 velocitydisplay.setText(e.getMessage());
             }
             return false;
         } else {
             //Remove the current marker from the map
             destMarker.remove();
-            //Acquire the new destination
+            // set previous point for distance calculation
+            // if previous point is null (still on first point) then set previous to first point
+            if(destination != null) {
+                previous = destination;
+            } else {
+                previous = staticRoute.get(ListI);
+            }
+            // get the next destination
             destination = staticRoute.get(ListI);
             //Create a marker at that point
             LatLng destLL = new LatLng(destination.getLatitude(),destination.getLongitude());
@@ -1344,25 +1351,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    private void calcGPSTurnOff(float time){
+    private void calcGPSTurnOff(float time, Location location) {
         float turnOffTime = time - STDTIMEALLOWANCE;
         //If the odds of getting a new fix are lower than we like, don't bother shutting it off at all
-        if(turnOffTime <= 0){
-            try{
+        if(turnOffTime <= 0) {
+            try {
                 //Log that the time was too small for standard deviation of reacquiring signal
                 Date now = new Date();
-                String logstring = "GPS_NOT_OFF (STD_TOO_LOW) | " + turnOffTime + "|" + now.toString() + "\n";
-                fos.write(logstring.getBytes());
-            }catch(Exception e){
+                int batLevel = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+                String logString = "GPS_NOT_OFF (STD_TOO_LOW) | " + turnOffTime + " | " + batLevel + " | " + now.toString() + "\n";
+                fos.write(logString.getBytes());
+            } catch(Exception e) {
                 velocitydisplay.setText(e.getMessage());
             }
         }
         //Conversely, if the time we're shutting it off for is too small for any noticeable savings
-        else if(turnOffTime <= POWERSAVINGSTIME){
+        else if(turnOffTime <= POWERSAVINGSTIME) {
             try {
                 Date now = new Date();
-                String logstring = "GPS_NOT_OFF (NO_POWER_SAVED) | " + turnOffTime + "|" + now.toString() + "\n";
-                fos.write(logstring.getBytes());
+                int batLevel = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+                String logString = "GPS_NOT_OFF (NO_POWER_SAVED) | " + turnOffTime + "|" + batLevel + " | " + now.toString() + "\n";
+                fos.write(logString.getBytes());
             } catch(Exception e) {
                 velocitydisplay.setText(e.getMessage());
             }
@@ -1372,13 +1381,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             try {
                 //Log that the time was too small for standard deviation of reacquiring signal
                 Date now = new Date();
-                String logstring = "ETAOFF|" + turnOffTime +"|" + now.toString() + "\n";
-                fos.write(logstring.getBytes());
-            }catch(Exception e){
+                int batLevel = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+                String logString = "ETAOFF | " + turnOffTime + " | " + batLevel + " | " + now.toString() + "\n";
+                fos.write(logString.getBytes());
+            } catch(Exception e) {
                 velocitydisplay.setText(e.getMessage());
             }
-            //turnGpsOff(getApplicationContext());
-            logGPSOff();
+            if(logging == false) {
+                turnGPSOff(getApplicationContext());
+            } else {
+                logGPSOff();
+            }
             //Convert from seconds to milliseconds for the runnable
             long milliseconds = (long)(turnOffTime * 1000);
             //Call the GPS ON Method after
@@ -1386,22 +1399,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    private void logGPSOff(){
+    /*******************************************************
+     * BELOW 2 METHODS USED FOR LOGGING OF GPS ON/OFF ONLY *
+     *******************************************************/
+
+    // method used to simulate GPS being turned off when only logging
+    private void logGPSOff() {
         Date now = new Date();
-        String logstring = "GPS_OFF | " + now.toString() + "\n";
+        int batLevel = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+        String logString = "GPS_OFF | " + batLevel + " | " + now.toString() + "\n";
         try {
-            fos.write(logstring.getBytes());
-        }catch(Exception e){
+            fos.write(logString.getBytes());
+        } catch(Exception e) {
             velocitydisplay.setText(e.getMessage());
         }
     }
 
-    private void logGPSOn(){
+    // method used to simulate GPS being turned on when only logging
+    private void logGPSOn() {
         Date now = new Date();
-        String logstring = "GPS_ON | " + now.toString() + "\n";
+        int batLevel = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+        String logString = "GPS_ON | " + batLevel + " | " + currentLocation.getLatitude() + " | " + currentLocation.getLongitude() + " | " + currentLocation.getSpeed() + " | " + calcDistance(currentLocation, previous) + " | " + now.toString() + "\n";
         try {
-            fos.write(logstring.getBytes());
-        }catch(Exception e){
+            fos.write(logString.getBytes());
+        } catch(Exception e) {
             velocitydisplay.setText(e.getMessage());
         }
         logGPSOnLatLng = true;
@@ -1409,32 +1430,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         firstOvershot = true;
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
-    //@RequiresApi(api = Build.VERSION_CODES.M)
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
+    /**********************************************************
+     * BELOW 2 METHODS USED FOR MODULATING OF GPS POWER STATE *
+     **********************************************************/
 
-        mMap.setMyLocationEnabled(true);
-        mMap.getUiSettings().setMyLocationButtonEnabled(true);
-        //Now to get the user's live speed
-
-        // Add a marker in Sydney and move the camera
-      /*  LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));*/
-        
-    }
-    private void turnGpsOff (Context context) {
-        //LocationServices.SettingsApi
+    // method to actually GPS off when not exclusively logging
+    private void turnGPSOff (Context context) {
         if(null == beforeEnable) {
             String str = Settings.Secure.getString (context.getContentResolver(),
                     Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
@@ -1453,8 +1454,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         j++;
                     }
                 }
-                beforeEnable = str;
-                //GPSText.setText(str);
             }
         }
         try {
@@ -1467,24 +1466,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             velocitydisplay.setText(e.getMessage());
         }
         Date now = new Date();
-        String logstring = "GPSOFF|" + now.toString() + "\n";
+        String logString = "GPS_OFF|" + now.toString() + "\n";
         try {
-            fos.write(logstring.getBytes());
-        }catch(Exception e){
+            fos.write(logString.getBytes());
+        } catch(Exception e) {
             velocitydisplay.setText(e.getMessage());
         }
     }
-    //Same function from MainActivity for turning the GPS ON
-    private void turnGpsOn (Context context) {
+
+    // method to actually GPS on when not exclusively logging
+    private void turnGPSOn (Context context) {
         try {
             Settings.Secure.putString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED, "network,gps");
         } catch (Exception e){
             velocitydisplay.setText(e.getMessage());
         }
         Date now = new Date();
-        String logstring = "GPSON|" + now.toString() + "\n";
+        String logString = "GPS_ON|" + now.toString() + "\n";
         try {
-            fos.write(logstring.getBytes());
+            fos.write(logString.getBytes());
         } catch(Exception e) {
             velocitydisplay.setText(e.getMessage());
         }
@@ -1492,6 +1492,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         logGPSOnLatLng = true;
         testOvershot = true;
         firstOvershot = true;
+    }
+
+    /**
+     * Manipulates the map once available.
+     * This callback is triggered when the map is ready to be used.
+     * This is where we can add markers or lines, add listeners or move the camera. In this case,
+     * we just add a marker near Sydney, Australia.
+     * If Google Play services is not installed on the device, the user will be prompted to install
+     * it inside the SupportMapFragment. This method will only be triggered once the user has
+     * installed Google Play services and returned to the app.
+     */
+    //@RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        mMap.setMyLocationEnabled(true);
+        mMap.getUiSettings().setMyLocationButtonEnabled(true);
+        //Now to get the user's live speed
     }
 
 }
