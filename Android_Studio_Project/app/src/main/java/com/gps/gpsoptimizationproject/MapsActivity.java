@@ -36,7 +36,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     final float STDTIMEALLOWANCE = 36.59f;
     //This is the amount of time the GPS needs to be off before we save power
     final float POWERSAVINGSTIME = 10f;
-    final float RADIUS = 80;
+    final float RADIUS = 40;
 
     //specifies who the route is going to be created for (Stephen, Matt, Mosse, driver, test)
     final String user = "mosse";
