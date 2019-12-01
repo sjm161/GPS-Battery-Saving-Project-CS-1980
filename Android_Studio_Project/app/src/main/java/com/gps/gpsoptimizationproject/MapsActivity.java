@@ -36,18 +36,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     final float STDTIMEALLOWANCE = 36.59f;
     //This is the amount of time the GPS needs to be off before we save power
     final float POWERSAVINGSTIME = 10f;
+    final float RADIUS = 80;
 
     //specifies who the route is going to be created for (Stephen, Matt, Mosse, driver, test)
-    final String user = "mosse";
+    final String user = "matt";
 
     //Declaring objects for use
-    Location currentLocation;
+    Location currentLocation = new Location("");
     private GoogleMap mMap;
     LocationManager LocM;
     LocationListener newlistener;
     TextView velocitydisplay, distancedisplay, timedisplay;
     // current point in list
     Location destination;
+<<<<<<< HEAD
+=======
+    // used to calculate distance from GPS turning on to previous point
+    Location previous = new Location("");
+>>>>>>> b4f0c11d7770bdb762e4a8619487c314187b47a5
     // used to set if we are only logging or modulating
     boolean logging = true;
     ArrayList<Location> staticRoute;
@@ -66,6 +72,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        currentLocation.setLongitude(50);
+        currentLocation.setLatitude(-80);
 
         setContentView(R.layout.activity_maps);
         //Declare the textboxs within the context of the code
@@ -1206,6 +1215,121 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 staticRoute.add(six);
                 staticRoute.add(seven);
             }
+            else if(GlobalVars.Transportation == "Car1"){
+                //Wabash
+                Location one = new Location("");
+                one.setLatitude(40.372869);
+                one.setLongitude(-80.010122);
+
+                //Killarney
+                Location two = new Location("");
+                two.setLatitude(40.375268);
+                two.setLongitude(-80.008786);
+
+                //Library
+                Location three = new Location("");
+                three.setLatitude(40.373777);
+                three.setLongitude(-80.006353);
+
+                //McNeilly
+                Location four = new Location("");
+                four.setLatitude(40.377916);
+                four.setLongitude(-80.003761);
+
+                //Pioneer
+                Location five = new Location("");
+                five.setLatitude(40.395344);
+                five.setLongitude(-80.030679);
+
+                //19
+                Location six = new Location("");
+                six.setLatitude(40.395785);
+                six.setLongitude(-80.033131);
+
+                //Scott
+                Location seven = new Location("");
+                seven.setLatitude(40.388364);
+                seven.setLongitude(-80.042914);
+                //Anawanda
+                Location eight = new Location("");
+                eight.setLatitude(40.373082);
+                eight.setLongitude(-80.034317);
+
+                //BroadMoor
+                Location nine = new Location("");
+                nine.setLatitude(40.376483);
+                nine.setLongitude(-80.031316);
+
+                //Audobon
+                Location ten = new Location("");
+                ten.setLatitude(40.375556);
+                ten.setLongitude(-80.030087);
+
+                //Country Club
+                Location eleven = new Location("");
+                eleven.setLatitude(40.376925);
+                eleven.setLongitude(-80.028861);
+
+                //Briarwood
+                Location twelve = new Location("");
+                twelve.setLatitude(40.375534);
+                twelve.setLongitude(-80.026310);
+
+                //Sleepy Hollow
+                Location thirteen = new Location("");
+                thirteen.setLatitude(40.376421);
+                thirteen.setLongitude(-80.023816);
+
+                //Rosewood
+                Location fourteen = new Location("");
+                fourteen.setLatitude(40.375328);
+                fourteen.setLongitude(-80.021662);
+
+                //MapleWood
+                Location fifteen = new Location("");
+                fifteen.setLatitude(40.376279);
+                fifteen.setLongitude(-80.020728);
+
+                //Larch
+                Location sixteen = new Location("");
+                sixteen.setLatitude(40.375154);
+                sixteen.setLongitude(-80.018344);
+
+                //Rolling Rock
+                Location seventeen = new Location("");
+                seventeen.setLatitude(40.375173);
+                seventeen.setLongitude(-80.015526);
+
+                //Newport Drive
+                Location eighteen = new Location("");
+                eighteen.setLatitude(40.376267);
+                eighteen.setLongitude(-80.015364);
+
+                //Down to Wabash
+                Location nineteen = new Location("");
+                nineteen.setLatitude(40.372883);
+                nineteen.setLongitude(-80.010141);
+
+                staticRoute.add(one);
+                staticRoute.add(two);
+                staticRoute.add(three);
+                staticRoute.add(four);
+                staticRoute.add(five);
+                staticRoute.add(six);
+                staticRoute.add(seven);
+                staticRoute.add(eight);
+                staticRoute.add(nine);
+                staticRoute.add(ten);
+                staticRoute.add(eleven);
+                staticRoute.add(twelve);
+                staticRoute.add(thirteen);
+                staticRoute.add(fourteen);
+                staticRoute.add(fifteen);
+                staticRoute.add(sixteen);
+                staticRoute.add(seventeen);
+                staticRoute.add(eighteen);
+                staticRoute.add(nineteen);
+            }
         } 
     }
 
@@ -1232,6 +1356,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         newlistener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
+                currentLocation = location;
                 velocitydisplay.setText("Trying to get velocity");
                 if(location.hasSpeed()) {
                     velocitydisplay.setText(location.getSpeed() + " m/s");
@@ -1250,15 +1375,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                 }
                 if(navigation) {
-                    float radius = 40;
-                    if(location.distanceTo(destination) <= radius) {
+
+                    if(location.distanceTo(destination) <= RADIUS) {
                         //We reached the destination radius - no need to test if we overshot the coordinate
                         testOvershot = false;
                         //We have reached our destination set a new destination
                         if(setDestination()) {
                             //Calculate time to the new destination
                             float time;
-                            time = (calcDistance(location, destination) - radius) / location.getSpeed();
+                            time = (calcDistance(location, destination) - RADIUS) / location.getSpeed();
                             try {
                                 Date now = new Date();
                                 int batLevel = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
@@ -1298,7 +1423,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     }
                                     //Calculate time to the new destination
                                     float time;
-                                    time = (calcDistance(location, destination) - radius) / location.getSpeed();
+                                    time = (calcDistance(location, destination) - RADIUS) / location.getSpeed();
                                     try {
                                         Date now = new Date();
                                         String logString = "LOC_OFF|" + location.getLatitude() + "|" + location.getLongitude() + "|" + now.toString()  +"\n";
