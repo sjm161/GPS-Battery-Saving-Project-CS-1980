@@ -1,5 +1,5 @@
 def main():
-    f = open("wattage_ON_ON.txt", "r")
+    f = open("wattage_ON_OFF_2.txt", "r")
     read = f.readlines()
     sum = 0
     for i in read:
