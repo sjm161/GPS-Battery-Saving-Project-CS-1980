@@ -36,13 +36,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     final float STDTIMEALLOWANCE = 36.59f;
     //This is the amount of time the GPS needs to be off before we save power
     final float POWERSAVINGSTIME = 10f;
-    final float RADIUS = 40;
+    final float RADIUS = 80;
 
     //specifies who the route is going to be created for (Stephen, Matt, Mosse, driver, test)
-    final String user = "mosse";
+    final String user = "matt";
 
     //Declaring objects for use
-    Location currentLocation;
+    Location currentLocation = new Location("");
     private GoogleMap mMap;
     LocationManager LocM;
     LocationListener newlistener;
@@ -50,7 +50,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     // current point in list
     Location destination;
     // used to calculate distance from GPS turning on to previous point
-    Location previous;
+    Location previous = new Location("");
     // used to set if we are only logging or modulating
     boolean logging = true;
     ArrayList<Location> staticRoute;
@@ -69,6 +69,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        currentLocation.setLongitude(50);
+        currentLocation.setLatitude(-80);
 
         setContentView(R.layout.activity_maps);
         //Declare the textboxs within the context of the code
@@ -1307,6 +1310,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         newlistener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
+                currentLocation = location;
                 velocitydisplay.setText("Trying to get velocity");
                 if(location.hasSpeed()) {
                     velocitydisplay.setText(String.valueOf(location.getSpeed()) + " m/s");
