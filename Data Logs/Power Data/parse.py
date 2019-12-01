@@ -1,6 +1,6 @@
 def main():
-    fr = open("GPS_ON_SCREEN_ON.txt", "r")
-    fw = open("wattage_ON_ON.txt", "a+")
+    fr = open("GPS_OFF_SCREEN_ON_2.txt", "r")
+    fw = open("wattage_OFF_ON_2.txt", "a+")
     read = fr.readlines()
     for i in read:
         if i.__contains__(","):
