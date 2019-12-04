@@ -39,7 +39,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     final float RADIUS = 80;
 
     //specifies who the route is going to be created for (Stephen, Matt, Mosse, driver, test)
-    final String user = "matt";
+    final String user = "driver";
 
     //Declaring objects for use
     Location currentLocation = new Location("");
@@ -49,13 +49,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     TextView velocitydisplay, distancedisplay, timedisplay;
     // current point in list
     Location destination;
-<<<<<<< HEAD
-=======
     // used to calculate distance from GPS turning on to previous point
     Location previous = new Location("");
->>>>>>> b4f0c11d7770bdb762e4a8619487c314187b47a5
     // used to set if we are only logging or modulating
-    boolean logging = true;
+    boolean logging = false;
     ArrayList<Location> staticRoute;
     int ListI = 0;
     boolean navigation = false, logGPSOnLatLng = false, testOvershot = false, firstOvershot=false;

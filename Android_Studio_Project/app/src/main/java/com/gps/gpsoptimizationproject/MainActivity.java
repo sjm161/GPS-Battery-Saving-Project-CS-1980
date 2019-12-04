@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     static TextView GPSText;
     static boolean route = false;
     // provides buttons for Matt route select
-    final static boolean Matt = true;
+    final static boolean Matt = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

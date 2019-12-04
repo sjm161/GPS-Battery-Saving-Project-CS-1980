@@ -2,5 +2,5 @@
 1. 'adb shell' (starts adb)
 2. 'su' (gives root access)
 3. 'cp data/data/com.gps.gpsoptimizationproject/files/GPSLog.txt storage/emulated/legacy' (moves log file to accessible location)
-4. Ctrl-D (exits adb)
+4. Enter Ctrl-D TWICE (exits su then exits adb)
 5. 'adb pull storage/emulated/legacy/GPSLog.txt' (pulls file to active directory)
