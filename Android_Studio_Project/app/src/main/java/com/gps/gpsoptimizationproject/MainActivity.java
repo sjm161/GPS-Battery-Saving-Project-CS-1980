@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     static TextView GPSText;
     static boolean route = false;
     // provides buttons for Matt route select
-    final static boolean Matt = false;
+    final static boolean Matt = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         Button pitt61 = findViewById(R.id.pitt61);
         Button pitt71 = findViewById(R.id.pitt71);
         Button homebus = findViewById(R.id.homebus);
+        Button customButton = findViewById(R.id.customButton);
 
         gpsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GlobalVars.Transportation = "Car1";
+                GlobalVars.Transportation = "T";
                 route = true;
                 moveToMapActivity();
             }
@@ -91,9 +92,10 @@ public class MainActivity extends AppCompatActivity {
             pitt61.setVisibility(View.GONE);
             pitt71.setVisibility(View.GONE);
             homebus.setVisibility(View.GONE);
+            customButton.setVisibility(View.GONE);
         } else {
             pitt.setText("To Pitt T");
-            home.setText("Custom Route");
+            home.setText("To Home T");
         }
         //Sets the routes for Matt's trips
         pitt61.setOnClickListener(new View.OnClickListener() {
@@ -116,6 +118,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 GlobalVars.Transportation = "Bus";
+                route = true;
+                moveToMapActivity();
+            }
+        });
+        customButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GlobalVars.Transportation = "Car1";
                 route = true;
                 moveToMapActivity();
             }

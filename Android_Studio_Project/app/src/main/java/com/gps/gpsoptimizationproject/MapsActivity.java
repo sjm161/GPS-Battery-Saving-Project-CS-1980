@@ -39,7 +39,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     final float RADIUS = 80;
 
     //specifies who the route is going to be created for (Stephen, Matt, Mosse, driver, test)
-    final String user = "driver";
+    final String user = "matt";
 
     //Declaring objects for use
     Location currentLocation = new Location("");
