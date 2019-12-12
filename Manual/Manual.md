@@ -10,12 +10,7 @@ __NOTICE: Manual written for android development. iOS was not part of our develo
 	3. Compiling and Building App onto Phone
 	4. Updates
 	5. Relevant Code Snippets
-
-
-
-
-
-
+	6. Flashing a Stock OS ROM
 
 ###1. Setting up the Phone
 Since the app requires being made a system app, There are a couple things required to have full functionality. Note: Written for Android. 
@@ -58,14 +53,14 @@ Relatively a simple process.
 	2.  You should be in a screen with app name towards top. Click the button with 3 dots in top right corner
 	3.  Click on the option to Convert to System app
 	4.  Reboot the Device for change to take effect
-7. __Important Notice__: whenever you install an app from a computer - you can only build updates from that same computer. If you want to build from a different computer, you will have to uninstall the app
+7. __Important Notice__: whenever you install an app from a computer - you can only build updates from that same computer. If you want to build from a different computer, you will have to uninstall the app from the phone first
 	* There are some work-arounds, but I don't know how they work
 
 ### 4. Updates
 Unfortunately, I don't know if it's Link2sd specific or Android in general, but updates for our system app are volatile. They'll work, but if the phone loses power - either from shutting off or running out of battery power- it will revert to the previous non-volatile state. If you need to make an update non-volatile, do the following:
 	
 1.  Open Link2sd, grant root access if prompted, and navigate to the app. Click on it 
-		*  Our app is called GPS Optimization Project.
+	*  Our app is called GPS Optimization Project.
 2.  You should be in a screen with app name towards top. Click the button with 3 dots in top right corner
 3.  Click on the option to Integrate update into System
 4.  Reboot the Device for change to take effect
@@ -79,4 +74,16 @@ MainActivity.java has our button for testing our code for enabling and disabling
 
 MapsActivity.java displays the map and holds the code for our algorithm. It's also where we build the route based upon the selected static route.
 
-In MainActivity, our functions for turning on and off the GPS are called turnGPSOn and turnGPSOff respectively. Same with MapsActivity. 
+In MainActivity, our functions for turning on and off the GPS are called turnGPSOn and turnGPSOff respectively. Same with MapsActivity.
+
+In MapsActivity, most of the Algorithm is in the OnLocationChangedMethod. If you want to adjust the frequency of Location Changes- look for this line :
+ ```
+LocM.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, newlistener);
+```
+
+
+* 1000 is the minimum delay in milliseconds, 0 is the minimum Distance between changes. 
+
+
+### 6. Flashing a Stock OS Rom
+[This tutorial](https://forum.xda-developers.com/google-nexus-5/general/tutorial-how-to-flash-factory-image-t2513701) is specific to the Google Nexus 5 which is what we used when we developed, but I figured I mention this. Includes links to tutorials for prequisites to flashing.
