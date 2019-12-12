@@ -1,9 +1,9 @@
-#GPS Battery Saving Project Manual
-##Created by Matt
+# GPS Battery Saving Project Manual
+## Created by Matt
 
 __NOTICE: Manual written for android development. iOS was not part of our development process.__
 
-###Table of Contents
+### Table of Contents
 
 	1. Setting up Phone
 	2. Setting Up Development Environment
@@ -12,7 +12,7 @@ __NOTICE: Manual written for android development. iOS was not part of our develo
 	5. Relevant Code Snippets
 	6. Flashing a Stock OS ROM
 
-###1. Setting up the Phone
+### 1. Setting up the Phone
 Since the app requires being made a system app, There are a couple things required to have full functionality. Note: Written for Android. 
 
 1. Go into __Developer Options__ from the Android Settings and enable __USB Debugging__
@@ -27,7 +27,7 @@ Since the app requires being made a system app, There are a couple things requir
 	* If you have another method for making an app a system app, you most likely don't have to download this
 	* Also, on some phones, the play store crashes as you type out "Link2sd" in the search bar. Don't know why, but it happens If this happens, search "2sd link" instead.
 
-###2. Setting Up Development Environment
+### 2. Setting Up Development Environment
 Relatively a simple process.
 
 1. Download Android Studio
@@ -38,7 +38,7 @@ Relatively a simple process.
 5. Navigate to the Folder of the Project (in our repository it was simply Android Studio Project) and select __GPS Optimization Project.iml__.
 6. The project should now be open.
 
-###3. Compiling and Building App on Phone
+### 3. Compiling and Building App on Phone
 1. Plug your phone into the PC by USB.
 2. There should be a prompt on the phone for USB debugging about trusting the  computer's RSA fingerprint. You will want to hit yes. 
 	* There is an option to remember this RSA fingerprint in future.
