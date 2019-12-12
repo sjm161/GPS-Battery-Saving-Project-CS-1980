@@ -158,9 +158,11 @@ public class MainActivity extends AppCompatActivity {
     }
     /* Note from Matt - Code from StackOverFlow at this link.
     https://stackoverflow.com/questions/4721449/how-can-i-enable-or-disable-the-gps-programmatically-on-android
-    AS raises errors which means we need to figure out what does what and if this even works with
-    current version of android*/
+    AS */
 
+    /* these turnGPSOn and turnGPSOff are only used for the top page button, to toggle GPS for testing */
+    /* turnGPSOn and turnGPSOff in MapsActivities are used to toggle GPS for actual use */
+    
     private void turnGPSOn (Context context) {
         try {
             Settings.Secure.putString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED, "network,gps");
@@ -238,11 +240,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void moveToMapActivity() {
-        Intent intent = new Intent(MainActivity.this, MapsActivity.class);
-        intent.putExtra("routeSelect", route);
-        startActivity(intent);
+        Intent intent = new Intent(MainActivity.this, MapsActivity.class); 
+        intent.putExtra("routeSelect", route);  // capture which route is select, add it to variable intent
+        startActivity(intent); // calls the MapsActivity (another page). (does it start another thread?)
     }
 
+    // these next few methods "have to be there" for GPS to work
     private void setNewLocationListener() {
        templistener = new LocationListener() {
 
