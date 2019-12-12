@@ -168,7 +168,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } catch (SecurityException e) {
             velocitydisplay.setText(e.getMessage());
         }
-        //create a new Runnable that will call the turn GPS On method after a certain amount of time that is inserted into the handler
+        //create a new Runnable that will call the turn GPS On method after a certain amount of time 
+        // that is inserted into the handler
         GPSON = new Runnable() {
             @Override
             public void run() {
@@ -1347,8 +1348,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return 0f;
     }
 
-    //This function creates a location listener which handles detecting location changes - we don't
-    //have a need for the other functions as they are not as efficient as we want them to be and don't do what we need them to do
+    //This function creates a location listener which handles detecting location changes - we don't have a need 
+    // for the other functions as they are not as efficient as we want them to be and don't do what we need them to do
     private void setNewLocationListener() {
         newlistener = new LocationListener() {
             @Override
@@ -1394,7 +1395,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                     //We are not within the target destination - see if we need to test for overshooting
                     else if(testOvershot) {
-                        //Acquire the first distance to destination and use that to determine if we overshot our destination
+                        //Acquire the first distance to destination (next point in the list)
+                        // and use that to determine if we overshot our destination
                         if(firstOvershot) {
                             firstDistance = location.distanceTo(destination);
                             firstOvershot = false;
