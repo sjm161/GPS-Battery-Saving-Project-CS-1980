@@ -9,7 +9,7 @@ __NOTICE: Manual written for android development. iOS was not part of our develo
 	2. Setting Up Development Environment
 	3. Compiling and Building App onto Phone
 	4. Updates
-	5. 
+	5. Relevant Code Snippets
 
 
 
@@ -48,6 +48,7 @@ Relatively a simple process.
 2. There should be a prompt on the phone for USB debugging about trusting the  computer's RSA fingerprint. You will want to hit yes. 
 	* There is an option to remember this RSA fingerprint in future.
 3. Along one of the top bars on Android Studio should be a bar with a drop down menu and a play button. The phone you have plugged in should either be displayed already or as an option in the drop down menu. 
+	* Example using my phone: ![MenuExample](ManualPhotos/DropDownAndPlay.png)
 	* If it shows up as Unknown Device, you may not have accepted the USB debugging prompt, or another error is happening.
 4.  Hit the play button to build and compile onto phone. Time can range from a few seconds to a couple minutes depending upon speed of machine used and such.
 5.  App should automatically open on phone when finished
@@ -69,3 +70,13 @@ Unfortunately, I don't know if it's Link2sd specific or Android in general, but 
 3.  Click on the option to Integrate update into System
 4.  Reboot the Device for change to take effect
 
+### 5. Relevant Code Snippets
+Most of our core functionality is across two files in our project - __MainActivity.java__ and __MapsActivity.java__.
+In android studio they should be under app -> java -> com.gps.gpsoptimizationproject
+![Main and Map](ManualPhotos/MMLocation.png)
+
+MainActivity.java has our button for testing our code for enabling and disabling the GPS. It's also where route selection occurs
+
+MapsActivity.java displays the map and holds the code for our algorithm. It's also where we build the route based upon the selected static route.
+
+In MainActivity, our functions for turning on and off the GPS are called turnGPSOn and turnGPSOff respectively. Same with MapsActivity. 
